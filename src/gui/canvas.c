@@ -52,10 +52,10 @@ void drawTime(void)
 
 void drawSpeed(void)
 {
-    int16_t x = 130;
-    int16_t y = 71;
+    int16_t x = 160;
+    int16_t y = 5;
 
-    font7segLoad(font_7seg_11);
+    font7segLoad(font_7seg_10);
     glcdSetXY(x, y);
 
     char buf[8];
@@ -63,11 +63,47 @@ void drawSpeed(void)
     snprintf(buf, sizeof(buf), "%02d", 23);
     font7segWriteString(buf);
 
-    glcdSetXY(x + 140, y + 25);
-    font7segLoad(font_7seg_8);
+    glcdSetXY(x + 122, y + 27);
+    font7segLoad(font_7seg_7);
     font7segWriteString("2");
 }
 
+void drawTrackLen()
+{
+    int16_t x = 170;
+    int16_t y = 120;
+
+    char buf[8];
+
+    font7segLoad(font_7seg_5);
+    glcdSetXY(x, y);
+    snprintf(buf, sizeof(buf), "%03d", 328);
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_3);
+    glcdSetXY(x + 90, y + 18);
+    snprintf(buf, sizeof(buf), ".%02d", 35);
+
+    font7segWriteString(buf);
+}
+
+void drawTrackTime()
+{
+    char buf[8];
+    int16_t x = 145;
+    int16_t y = 190;
+
+    font7segLoad(font_7seg_5);
+    glcdSetXY(x, y);
+    snprintf(buf, sizeof(buf), "%02d:%02d", 32, 26);
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_3);
+    glcdSetXY(x + 130, y + 18);
+    snprintf(buf, sizeof(buf), ".%02d", 33);
+
+    font7segWriteString(buf);
+}
 
 void canvasShowComp(bool clear)
 {
@@ -77,16 +113,17 @@ void canvasShowComp(bool clear)
     glcdSetFontColor(pal->fg);
     glcdSetFontBgColor(pal->bg);
 
-    glcdDrawRect(5, 60, 310, 2, COLOR_BLACK);
+//    glcdDrawRect(5, 60, 310, 2, COLOR_BLACK);
     glcdDrawRect(5, 178, 310, 2, COLOR_BLACK);
 
-    glcdDrawFrame(5, 75, 80, 30, 5, COLOR_BLACK);
+//    glcdDrawFrame(5, 75, 80, 30, 5, COLOR_BLACK);
 
-    glcdDrawRing(30, 140, 25, 5, COLOR_BLACK);
+//    glcdDrawRing(30, 140, 25, 5, COLOR_BLACK);
 
     drawTime();
-
     drawSpeed();
+    drawTrackLen();
+    drawTrackTime();
 
     return;
 
