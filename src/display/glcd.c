@@ -126,6 +126,20 @@ void glcdShift(int16_t pos)
     }
 }
 
+void glcdSleep(bool value)
+{
+    if (glcd.drv->sleep) {
+        glcd.drv->sleep(value);
+    }
+}
+
+void glcdSetIdle(bool value)
+{
+    if (glcd.drv->setIdle) {
+        glcd.drv->setIdle(value);
+    }
+}
+
 void glcdFbSync(void)
 {
     if (glcd.drv->fbSync) {

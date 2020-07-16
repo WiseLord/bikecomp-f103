@@ -33,15 +33,16 @@ TARGET = $(call lc, $(PROJECT)_$(STM32_MCU)_$(DISPLAY)_$(DISPVAR))
 
 C_DEFS += -DUSE_FULL_LL_DRIVER -D$(STM32_GROUP) -D_$(STM32_MCU)
 
-#C_DEFS += -D_DISP_READ_ENABLED
-#C_DEFS += -D_DISP_RST_ENABLED
+C_DEFS += -D_DISP_READ_ENABLED
+C_DEFS += -D_DISP_RST_ENABLED
 
 C_SOURCES += main.c
 
 C_SOURCES += comp.c
-C_SOURCES += pins.c
 C_SOURCES += spi.c
 C_SOURCES += utils.c
+
+C_SOURCES += gui/font7seg.c
 
 # Display source files
 C_SOURCES += $(wildcard display/fonts/font*.c)
@@ -122,7 +123,6 @@ endif
 
 C_SOURCES += display/$(DISPTYPE)$(DISPSIZE)/$(call lc,$(DISPLAY)).c
 C_SOURCES += display/dispdrv.c
-C_SOURCES += display/font7seg.c
 C_SOURCES += display/glcd.c
 C_DEFS += -D_$(DISPLAY)
 C_DEFS += -D_DISP_$(DISPVAR)

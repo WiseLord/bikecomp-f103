@@ -55,6 +55,8 @@ Glcd *glcdGet(void);
 
 void glcdSetOrientation(GlcdOrientation value);
 void glcdShift(int16_t pos);
+void glcdSleep(bool value);
+void glcdSetIdle(bool value);
 
 void glcdFbSync(void);
 

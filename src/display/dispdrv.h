@@ -32,7 +32,8 @@ extern "C" {
 #define DISP_DATA_LO_Pin        (LL_GPIO_PIN_0 | LL_GPIO_PIN_1 | LL_GPIO_PIN_2 | LL_GPIO_PIN_3 | \
                                  LL_GPIO_PIN_4 | LL_GPIO_PIN_5 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7)
 #else
-#define DISP_DATA_Port          GPIOB
+#define DISP_DATA_Port          GPIOA
+
 #define DISP_DATA_Pin           (LL_GPIO_PIN_0 | LL_GPIO_PIN_1 | LL_GPIO_PIN_2 | LL_GPIO_PIN_3 | \
                                  LL_GPIO_PIN_4 | LL_GPIO_PIN_5 | LL_GPIO_PIN_6 | LL_GPIO_PIN_7)
 #endif
@@ -54,10 +55,10 @@ extern "C" {
 
 typedef struct {
     void (*init)(void);
-    void (*sleep)(void);
-    void (*wakeup)(void);
+    void (*sleep)(bool value);
+    void (*setIdle)(bool value);
     void (*setWindow)(int16_t x, int16_t y, int16_t w, int16_t h);
-    void (*rotate)(bool rotate);
+    void (*rotate)(bool value);
     void (*shift)(int16_t value);
 
     void *fb;

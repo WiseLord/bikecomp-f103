@@ -4,8 +4,6 @@ src/comp.h
 src/display/colors.h
 src/display/dispdrv.c
 src/display/dispdrv.h
-src/display/font7seg.c
-src/display/font7seg.h
 src/display/fonts/font-amp-08.c
 src/display/fonts/fonts.h
 src/display/fonts/font-terminus-12.c
@@ -102,6 +100,8 @@ src/drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_i2c.c
 src/drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_rcc.c
 src/drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_usart.c
 src/drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_ll_utils.c
+src/gui/font7seg.c
+src/gui/font7seg.h
 src/hwlibs.h
 src/i2c.c
 src/i2c.h
@@ -109,8 +109,6 @@ src/ks0066.c
 src/ks0066.h
 src/main.c
 src/Makefile
-src/pins.c
-src/pins.h
 src/spi.c
 src/spi.h
 src/system/startup_stm32f103xb.s

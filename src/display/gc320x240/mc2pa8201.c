@@ -67,24 +67,32 @@ void mc2pa8201Rotate(bool rotate)
     SET(DISP_CS);
 }
 
-void mc2pa8201Sleep(void)
+void mc2pa8201Sleep(bool value)
 {
     CLR(DISP_CS);
 
-    dispdrvSelectReg8(0x28);    // Display OFF
-    utilmDelay(100);
-    dispdrvSelectReg8(0x10);
+    if (value) {
+        dispdrvSelectReg8(0x28);    // Display OFF
+        utilmDelay(100);
+        dispdrvSelectReg8(0x10);
+    } else {
+        dispdrvSelectReg8(0x11);    // Display OFF
+        utilmDelay(100);
+        dispdrvSelectReg8(0x29);
+    }
 
     SET(DISP_CS);
 }
 
-void mc2pa8201Wakeup(void)
+void mc2pa8201SetIdle(bool value)
 {
     CLR(DISP_CS);
 
-    dispdrvSelectReg8(0x11);    // Display OFF
-    utilmDelay(100);
-    dispdrvSelectReg8(0x29);
+    if (value) {
+        dispdrvSelectReg8(0x39);    // 8-color idle mode on
+    } else {
+        dispdrvSelectReg8(0x38);    // 8-color idle mode off
+    }
 
     SET(DISP_CS);
 }
@@ -114,7 +122,7 @@ const DispDriver dispdrv = {
     .height = 240,
     .init = mc2pa8201Init,
     .sleep = mc2pa8201Sleep,
-    .wakeup = mc2pa8201Wakeup,
+    .setIdle = mc2pa8201SetIdle,
     .setWindow = mc2pa8201SetWindow,
     .rotate = mc2pa8201Rotate,
 };
