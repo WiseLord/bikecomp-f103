@@ -76,6 +76,10 @@ static void sysInit(void)
     LL_RCC_SetUSARTClockSource(LL_RCC_USART3_CLKSOURCE_SYSCLK);
     LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
 #endif
+
+#ifdef STM32F1
+    LL_GPIO_AF_Remap_SWJ_NOJTAG();
+#endif
 }
 
 
