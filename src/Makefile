@@ -42,7 +42,9 @@ C_SOURCES += comp.c
 C_SOURCES += spi.c
 C_SOURCES += utils.c
 
+C_SOURCES += gui/canvas.c
 C_SOURCES += gui/font7seg.c
+C_SOURCES += gui/palette.c
 
 # Display source files
 C_SOURCES += $(wildcard display/fonts/font*.c)

@@ -91,7 +91,6 @@ void font7segWriteString(const char *string)
     while (*string) {
         font7segWriteChar(*string++);
     }
-
 }
 
 // Font format:

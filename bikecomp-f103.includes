@@ -7,3 +7,4 @@ src/drivers/STM32F3xx_HAL_Driver/Inc
 src/system
 src/display/fonts
 .
+src/gui
