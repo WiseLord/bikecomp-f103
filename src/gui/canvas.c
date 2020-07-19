@@ -10,7 +10,7 @@ static Canvas canvas;
 
 void canvasInit()
 {
-    glcdInit(GLCD_LANDSCAPE);
+    glcdInit(GLCD_PORTRATE);
     glcdSetIdle(true);
 
     canvas.glcd = glcdGet();
@@ -19,7 +19,7 @@ void canvasInit()
     paletteSetIndex(palIdx);
     canvas.pal = paletteGet();
 
-    glcdDrawRect(0, 0, dispdrv.width, dispdrv.height, canvas.pal->bg);
+    glcdDrawRect(0, 0, dispdrv.height, dispdrv.width, canvas.pal->bg);
 }
 
 Canvas *canvasGet()
@@ -42,7 +42,7 @@ void drawTime(void)
 {
     font7segLoad(font_7seg_5);
 
-    glcdSetXY(5, 8);
+    glcdSetXY(70, 250);
 
     char buf[8];
     snprintf(buf, sizeof(buf), "%02d:%02d", 21, 30);
@@ -52,8 +52,8 @@ void drawTime(void)
 
 void drawSpeed(void)
 {
-    int16_t x = 160;
-    int16_t y = 5;
+    int16_t x = 70;
+    int16_t y = 20;
 
     font7segLoad(font_7seg_10);
     glcdSetXY(x, y);
@@ -70,7 +70,7 @@ void drawSpeed(void)
 
 void drawTrackLen()
 {
-    int16_t x = 170;
+    int16_t x = 70;
     int16_t y = 120;
 
     char buf[8];
@@ -90,7 +90,7 @@ void drawTrackLen()
 void drawTrackTime()
 {
     char buf[8];
-    int16_t x = 145;
+    int16_t x = 55;
     int16_t y = 190;
 
     font7segLoad(font_7seg_5);
@@ -108,34 +108,14 @@ void drawTrackTime()
 void canvasShowComp(bool clear)
 {
     const Palette *pal = paletteGet();
-    Comp *comp = compGet();
 
     glcdSetFontColor(pal->fg);
     glcdSetFontBgColor(pal->bg);
 
-//    glcdDrawRect(5, 60, 310, 2, COLOR_BLACK);
     glcdDrawRect(5, 178, 310, 2, COLOR_BLACK);
-
-//    glcdDrawFrame(5, 75, 80, 30, 5, COLOR_BLACK);
-
-//    glcdDrawRing(30, 140, 25, 5, COLOR_BLACK);
 
     drawTime();
     drawSpeed();
     drawTrackLen();
     drawTrackTime();
-
-    return;
-
-
-    font7segLoad(font_7seg_4);
-    glcdSetXY(100, 100);
-
-    char buf[8];
-    snprintf(buf, sizeof(buf), "%05" PRId32, comp->wTurns);
-
-    font7segWriteString(buf);
-
-    utilmDelay(100);
-
 }

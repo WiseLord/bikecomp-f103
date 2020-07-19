@@ -648,8 +648,6 @@ void glcdDrawCircle(int16_t xc, int16_t yc, int16_t r,
     int16_t x = 0;
     int16_t y = r;
 
-    glcdDrawLine(xc - r, yc, xc + r, yc, color);
-
     while (x < y) {
         if (f >= 0) {
             y--;
@@ -662,9 +660,11 @@ void glcdDrawCircle(int16_t xc, int16_t yc, int16_t r,
 
         glcdDrawLine(xc - x, yc + y, xc + x, yc + y, color);
         glcdDrawLine(xc - x, yc - y, xc + x, yc - y, color);
-        glcdDrawLine(xc - y, yc + x, xc + y, yc + x, color);
-        glcdDrawLine(xc - y, yc - x, xc + y, yc - x, color);
+        glcdDrawLine(xc - y, yc - x, xc - y, yc + x, color);
+        glcdDrawLine(xc + y, yc - x, xc + y, yc + x, color);
     }
+
+    glcdDrawRect(xc - x, yc - y, 2 * x, 2 * y, color);
 }
 
 void glcdDrawRing(int16_t xc, int16_t yc, int16_t r, int16_t t, color_t color)
