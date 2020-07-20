@@ -18,8 +18,6 @@ void canvasInit()
     PalIdx palIdx = PAL_DEFAULT;
     paletteSetIndex(palIdx);
     canvas.pal = paletteGet();
-
-    glcdDrawRect(0, 0, dispdrv.height, dispdrv.width, canvas.pal->bg);
 }
 
 Canvas *canvasGet()
