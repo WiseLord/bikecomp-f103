@@ -25,16 +25,16 @@ extern "C" {
 #define DISP_CS_Port            GPIOB
 #define DISP_CS_Pin             LL_GPIO_PIN_12
 #define DISP_RS_Port            GPIOB
-#define DISP_RS_Pin             LL_GPIO_PIN_14
+#define DISP_RS_Pin             LL_GPIO_PIN_11
 #define DISP_WR_Port            GPIOB
 #define DISP_WR_Pin             LL_GPIO_PIN_15
 #ifdef _DISP_READ_ENABLED
 #define DISP_RD_Port            GPIOB
-#define DISP_RD_Pin             LL_GPIO_PIN_10
+#define DISP_RD_Pin             LL_GPIO_PIN_14
 #endif
 #ifdef _DISP_RST_ENABLED
-#define DISP_RST_Port           GPIOA
-#define DISP_RST_Pin            LL_GPIO_PIN_15
+#define DISP_RST_Port           GPIOB
+#define DISP_RST_Pin            LL_GPIO_PIN_10
 #endif
 
 #ifdef __cplusplus
