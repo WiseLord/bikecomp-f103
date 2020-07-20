@@ -264,7 +264,7 @@ static void dispdrvInitPins(void)
     initDef.Pin = DISP_RS_Pin;
     LL_GPIO_Init(DISP_RS_Port, &initDef);
 
-#ifdef _DISP_RST
+#ifdef _DISP_RST_ENABLED
     initDef.Pin = DISP_RST_Pin;
     LL_GPIO_Init(DISP_RST_Port, &initDef);
 #endif
