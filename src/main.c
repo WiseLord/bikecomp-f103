@@ -83,11 +83,6 @@ static void sysInit(void)
 }
 
 
-void SysTick_Handler(void)
-{
-
-}
-
 int main(void)
 {
     sysInit();

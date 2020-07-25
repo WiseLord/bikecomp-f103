@@ -44,14 +44,24 @@ static void drawTest(void)
 
     char buf[8];
 
+    Comp *comp = compGet();
+
     font7segLoad(font_7seg_3);
 
     glcdSetXY(x, y);
-    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->wTurns);
+    snprintf(buf, sizeof(buf), "%5" PRId32, comp->wTurns);
     font7segWriteString(buf);
 
     glcdSetXY(x, y + 40);
-    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->pTurns);
+    snprintf(buf, sizeof(buf), "%5" PRId32, LL_TIM_GetCounter(TIM_COMP));
+    font7segWriteString(buf);
+
+    glcdSetXY(x, y + 80);
+    snprintf(buf, sizeof(buf), "%5" PRId32, comp->priv->wCntLastTurn);
+    font7segWriteString(buf);
+
+    glcdSetXY(x, y + 120);
+    snprintf(buf, sizeof(buf), "%5" PRId32, comp->priv->pCntLastTurn);
     font7segWriteString(buf);
 }
 
@@ -60,17 +70,19 @@ static void drawSpeed(void)
     int16_t x = 82;
     int16_t y = 1;
 
-    font7segLoad(font_7seg_10);
-    glcdSetXY(x, y);
-
     char buf[8];
 
-    snprintf(buf, sizeof(buf), "%02d", 23);
+    uint32_t speedMph = compGetSpeedMph();
+
+    font7segLoad(font_7seg_10);
+    glcdSetXY(x, y);
+    snprintf(buf, sizeof(buf), "%2u", (unsigned)(speedMph / 1000));
     font7segWriteString(buf);
 
-    glcdSetXY(x + 122, y + 27);
     font7segLoad(font_7seg_7);
-    font7segWriteString("2");
+    glcdSetXY(x + 122, y + 27);
+    snprintf(buf, sizeof(buf), "%1u", (unsigned)(speedMph % 1000 / 100));
+    font7segWriteString(buf);
 }
 
 
@@ -102,7 +114,11 @@ void drawTrackLen()
     font7segLoad(font_7seg_3);
     glcdSetXY(x + 90, y + 18);
     snprintf(buf, sizeof(buf), ".%02d", 35);
+    font7segWriteString(buf);
 
+    font7segLoad(font_7seg_3);
+    glcdSetXY(x + 90, y + 18);
+    snprintf(buf, sizeof(buf), ".%02d", 35);
     font7segWriteString(buf);
 }
 
@@ -134,12 +150,12 @@ void canvasShowComp(bool clear)
     drawSpeed();
 
     if (clear) {
-        glcdDrawRect(5, 178, 230, 2, COLOR_BLACK);
+//        glcdDrawRect(5, 178, 230, 2, COLOR_BLACK);
     }
 
     drawTest();
 
-    drawTime();
-    drawTrackLen();
-    drawTrackTime();
+//    drawTime();
+//    drawTrackLen();
+//    drawTrackTime();
 }

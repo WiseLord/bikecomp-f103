@@ -1,6 +1,6 @@
 #include "input.h"
 
-#include "display/dispdrv.h"
+#include "hwlibs.h"
 #include "timers.h"
 
 static Input input;

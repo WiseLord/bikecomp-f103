@@ -103,6 +103,8 @@ src/main.c
 src/Makefile
 src/spi.c
 src/spi.h
+src/swtimers.c
+src/swtimers.h
 src/system/startup_stm32f103xb.s
 src/system/startup_stm32f303xc.s
 src/system/stm32f103c8_flash.ld

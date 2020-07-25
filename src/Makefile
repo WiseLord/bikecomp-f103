@@ -41,6 +41,7 @@ C_SOURCES += main.c
 C_SOURCES += comp.c
 C_SOURCES += input.c
 C_SOURCES += spi.c
+C_SOURCES += swtimers.c
 C_SOURCES += timers.c
 C_SOURCES += utils.c
 

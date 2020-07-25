@@ -50,6 +50,8 @@ extern "C" {
 
 #define I2C_MASTER              I2C1
 
+#define TIM_COMP                TIM3
+#define TIM_COMP_HANDLER        TIM3_IRQHandler
 #define TIM_INPUT               TIM4
 #define TIM_INPUT_HANDLER       TIM4_IRQHandler
 

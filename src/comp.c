@@ -3,8 +3,13 @@
 #include "gui/canvas.h"
 #include "hwlibs.h"
 #include "input.h"
+#include "swtimers.h"
+#include "timers.h"
 
-static Comp comp;
+#define ANTIBOUNCE  100
+
+static CompPriv priv;
+static Comp comp = { .priv = &priv };
 
 static void compActionGet(void);
 static void compActionHandle(void);
@@ -42,8 +47,16 @@ void compInit()
 
     inputInit();
 
+    comp.wLenMm = 2062; // TODO: Read from settings
+
     NVIC_SetPriority(EXTI9_5_IRQn, 0);
     NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+    timerInit(TIM_COMP, 7199, 65535);   // 10k counts/sec, reset after 6.5 seconds
+    swTimInit();
+
+    swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, SW_TIM_ON);
+    swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, SW_TIM_ON);
 }
 
 Comp *compGet()
@@ -75,16 +88,69 @@ void compRun()
     }
 }
 
-void compWheelCb(void)
+uint32_t compGetSpeedMph(void)
 {
-    comp.wTurns++;
-    // TODO: antibounce
+    /*
+     * Counter freq = 10000 counts / 1 sec = wCntLastTurn / time(sec)
+     * So, time(sec) = wCntLastTurn / 10000;
+     * Speed(mm/sec) = wLenMm / time(sec) = wLenMm * 10000 / wCntLastTurn
+     * Speed(m/h) = Speed(mm/sec) * 3600(sec/h) / 1000(mm/m), so
+     * Speed(m/h) = (wLenMm * 10000 / wCntLastTurn) * 3600 / 1000
+     * Speed(m/h) = wLenMm * 36000 / wCntLastTurn
+     */
+
+    uint32_t speedMph = comp.wLenMm * 36000 / priv.wCntLastTurn;
+
+    return speedMph;
 }
 
-void compPedalCb(void)
+
+static void compWheelCb(void)
 {
+    if (swTimGet(SW_TIM_WHEEL_ANTIBOUNCE > 0)) {
+        return;
+    }
+
+    uint32_t tcnt = LL_TIM_GetCounter(TIM_COMP);
+    LL_TIM_SetCounter(TIM_COMP, 0);
+
+    // Update counter for the pedal
+    priv.pCntCurrTurn += tcnt;
+
+    // Save wheel counter of the full turn
+    priv.wCntLastTurn = priv.wCntCurrTurn + tcnt;
+    priv.wCntCurrTurn = 0;
+
+    swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, ANTIBOUNCE);
+
+    comp.wTurns++;
+}
+
+static void compPedalCb(void)
+{
+    if (swTimGet(SW_TIM_PEDAL_ANTIBOUNCE) > 0) {
+        return;
+    }
+
+    uint32_t tcnt = LL_TIM_GetCounter(TIM_COMP);
+    LL_TIM_SetCounter(TIM_COMP, 0);
+
+    // Update counter for the wheel
+    priv.wCntCurrTurn += tcnt;
+
+    // Save pedal counter of the full turn
+    priv.pCntLastTurn = priv.pCntCurrTurn + tcnt;
+    priv.pCntCurrTurn = 0;
+
+    swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, ANTIBOUNCE);
+
     comp.pTurns++;
-    // TODO: antibounce
+}
+
+static void compTimCb(void)
+{
+    comp.wTurns = 0;
+    comp.pTurns = 0;
 }
 
 void EXTI_COMP_HANDLER()
@@ -102,5 +168,15 @@ void EXTI_COMP_HANDLER()
 
         // Callback
         compPedalCb();
+    }
+}
+
+void TIM_COMP_HANDLER(void)
+{
+    if (LL_TIM_IsActiveFlag_UPDATE(TIM_COMP)) {
+        // Clear the update interrupt flag
+        LL_TIM_ClearFlag_UPDATE(TIM_COMP);
+
+        compTimCb();
     }
 }

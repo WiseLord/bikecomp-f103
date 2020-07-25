@@ -21,16 +21,28 @@ extern "C" {
 #define PEDAL_AR_ExtiLine       LL_GPIO_AF_EXTI_LINE9
 
 typedef struct {
-    int32_t wLenMm;     // Length of wheel, mm
-    int32_t wTurns;     // Number of wheel turns
+    uint32_t wCntCurrTurn;          // Wheel counter in the current turn
+    uint32_t pCntCurrTurn;          // Pedal counter in the current turn
 
-    int32_t pTurns;     // Number of pedal turns
+    uint32_t wCntLastTurn;          // Wheel counter in the last full turn
+    uint32_t pCntLastTurn;          // Pedal counter in the last full turn
+} CompPriv;
+
+typedef struct {
+    CompPriv *priv;
+
+    int32_t wLenMm;                 // Length of wheel, mm
+
+    int32_t wTurns;                 // Number of wheel turns in the trip
+    int32_t pTurns;                 // Number of pedal turns in the trip
 } Comp;
 
 void compInit(void);
 Comp *compGet();
 
 void compRun(void);
+
+uint32_t compGetSpeedMph(void);    // Get speed in m/hour
 
 #ifdef __cplusplus
 }
