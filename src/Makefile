@@ -39,7 +39,9 @@ C_DEFS += -D_DISP_RST_ENABLED
 C_SOURCES += main.c
 
 C_SOURCES += comp.c
+C_SOURCES += input.c
 C_SOURCES += spi.c
+C_SOURCES += timers.c
 C_SOURCES += utils.c
 
 C_SOURCES += gui/canvas.c

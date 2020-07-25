@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "comp.h"
+#include "input.h"
 #include "font7seg.h"
 
 static Canvas canvas;
@@ -36,22 +37,26 @@ void canvasClear()
     glcdSetFontBgColor(canvas.pal->bg);
 }
 
-void drawTime(void)
+static void drawTest(void)
 {
-    font7segLoad(font_7seg_5);
-
-    glcdSetXY(70, 250);
+    int16_t x = 5;
+    int16_t y = 120;
 
     char buf[8];
-    snprintf(buf, sizeof(buf), "%02d:%02d", 21, 30);
 
+    font7segLoad(font_7seg_3);
+
+    glcdSetXY(x, y);
+//    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->wTurns);
+    snprintf(buf, sizeof(buf), "%04X", inputGet()->btn);
     font7segWriteString(buf);
+
 }
 
-void drawSpeed(void)
+static void drawSpeed(void)
 {
-    int16_t x = 70;
-    int16_t y = 20;
+    int16_t x = 82;
+    int16_t y = 1;
 
     font7segLoad(font_7seg_10);
     glcdSetXY(x, y);
@@ -66,9 +71,23 @@ void drawSpeed(void)
     font7segWriteString("2");
 }
 
+
+
+void drawTime(void)
+{
+    font7segLoad(font_7seg_5);
+
+    glcdSetXY(70, 250);
+
+    char buf[8];
+    snprintf(buf, sizeof(buf), "%02d:%02d", 21, 30);
+
+    font7segWriteString(buf);
+}
+
 void drawTrackLen()
 {
-    int16_t x = 70;
+    int16_t x = 100;
     int16_t y = 120;
 
     char buf[8];
@@ -110,10 +129,15 @@ void canvasShowComp(bool clear)
     glcdSetFontColor(pal->fg);
     glcdSetFontBgColor(pal->bg);
 
-    glcdDrawRect(5, 178, 310, 2, COLOR_BLACK);
+    drawSpeed();
+
+    if (clear) {
+        glcdDrawRect(5, 178, 230, 2, COLOR_BLACK);
+    }
+
+    drawTest();
 
     drawTime();
-    drawSpeed();
     drawTrackLen();
     drawTrackTime();
 }

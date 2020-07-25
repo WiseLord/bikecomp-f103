@@ -1,6 +1,7 @@
 #include "comp.h"
 
 #include "gui/canvas.h"
+#include "input.h"
 
 static Comp comp;
 
@@ -11,6 +12,9 @@ static void compScreenShow(void);
 void compInit()
 {
     canvasInit();
+    canvasClear();
+
+    inputInit();
 }
 
 Comp *compGet()

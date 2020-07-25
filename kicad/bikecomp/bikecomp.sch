@@ -392,15 +392,11 @@ WHEEL
 Text Label 5000 4800 0    50   ~ 0
 PEDAL
 Wire Wire Line
-	5800 4100 5000 4100
-Wire Wire Line
 	5800 4200 5000 4200
 Wire Wire Line
 	5800 4300 5000 4300
 Wire Wire Line
 	5800 4400 5000 4400
-Text Label 5000 4100 0    50   ~ 0
-BTN0
 Text Label 5000 4200 0    50   ~ 0
 BTN1
 Text Label 5000 4300 0    50   ~ 0

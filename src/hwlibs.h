@@ -11,6 +11,7 @@ extern "C" {
 #include <stm32f1xx_ll_rcc.h>
 #include <stm32f1xx_ll_spi.h>
 #include <stm32f1xx_ll_system.h>
+#include <stm32f1xx_ll_tim.h>
 #include <stm32f1xx_ll_utils.h>
 
 // Pins helper definitions
@@ -47,9 +48,9 @@ extern "C" {
 #define LL_I2C1_SDA_PIN         LL_GPIO_PIN_9
 
 #define I2C_MASTER              I2C1
-#define I2C_SLAVE               I2C2
 
-#define I2C_KS0066              I2C1
+#define TIM_INPUT               TIM4
+#define TIM_INPUT_HANDLER       TIM4_IRQHandler
 
 #ifdef __cplusplus
 }
