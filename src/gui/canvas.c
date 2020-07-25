@@ -40,17 +40,19 @@ void canvasClear()
 static void drawTest(void)
 {
     int16_t x = 5;
-    int16_t y = 120;
+    int16_t y = 100;
 
     char buf[8];
 
     font7segLoad(font_7seg_3);
 
     glcdSetXY(x, y);
-//    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->wTurns);
-    snprintf(buf, sizeof(buf), "%04X", inputGet()->btn);
+    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->wTurns);
     font7segWriteString(buf);
 
+    glcdSetXY(x, y + 40);
+    snprintf(buf, sizeof(buf), "%5" PRId32, compGet()->pTurns);
+    font7segWriteString(buf);
 }
 
 static void drawSpeed(void)

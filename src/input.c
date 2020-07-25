@@ -19,13 +19,6 @@ static uint16_t inputRawGet(void)
         raw |= BTN_3;
     }
 
-    if (!READ(IN_SENS_1)) {
-        raw |= SENS_1;
-    }
-    if (!READ(IN_SENS_2)) {
-        raw |= SENS_2;
-    }
-
     return raw;
 }
 
@@ -71,11 +64,6 @@ static void inputInitPins(void)
     LL_GPIO_Init(IN_BTN_2_Port, &initDef);
     initDef.Pin = IN_BTN_3_Pin;
     LL_GPIO_Init(IN_BTN_3_Port, &initDef);
-
-    initDef.Pin = IN_SENS_1_Pin;
-    LL_GPIO_Init(IN_SENS_1_Port, &initDef);
-    initDef.Pin = IN_SENS_2_Pin;
-    LL_GPIO_Init(IN_SENS_2_Port, &initDef);
 }
 
 void inputInit(void)
@@ -90,18 +78,6 @@ Input *inputGet()
     return &input;
 }
 
-void TIM_INPUT_HANDLER(void)
-{
-    if (LL_TIM_IsActiveFlag_UPDATE(TIM_INPUT)) {
-        // Clear the update interrupt flag
-        LL_TIM_ClearFlag_UPDATE(TIM_INPUT);
-
-        uint16_t btnNow = inputRawGet();
-
-        inputHandleButtons(btnNow & INPUT_ALL);
-    }
-}
-
 CmdBtn inputGetBtnCmd(void)
 {
     CmdBtn ret =  { .btn = input.btn, .flags = input.flags };
@@ -110,4 +86,16 @@ CmdBtn inputGetBtnCmd(void)
     input.flags = BTN_FLAG_NO;
 
     return ret;
+}
+
+void TIM_INPUT_HANDLER(void)
+{
+    if (LL_TIM_IsActiveFlag_UPDATE(TIM_INPUT)) {
+        // Clear the update interrupt flag
+        LL_TIM_ClearFlag_UPDATE(TIM_INPUT);
+
+        uint16_t btnNow = inputRawGet();
+
+        inputHandleButtons(btnNow & INPUT_BTNS);
+    }
 }

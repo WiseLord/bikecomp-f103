@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stm32f1xx_ll_bus.h>
 #include <stm32f1xx_ll_cortex.h>
+#include <stm32f1xx_ll_exti.h>
 #include <stm32f1xx_ll_gpio.h>
 #include <stm32f1xx_ll_rcc.h>
 #include <stm32f1xx_ll_spi.h>
@@ -51,6 +52,8 @@ extern "C" {
 
 #define TIM_INPUT               TIM4
 #define TIM_INPUT_HANDLER       TIM4_IRQHandler
+
+#define EXTI_COMP_HANDLER       EXTI9_5_IRQHandler
 
 #ifdef __cplusplus
 }
