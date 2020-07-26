@@ -111,12 +111,7 @@ void glcdSetOrientation(GlcdOrientation value)
         glcd.drv->rotate(value & GLCD_LANDSCAPE_ROT);
     }
 
-    bool portrate = (value & GLCD_PORTRATE);
-
-    glcd.rect.x = 0;
-    glcd.rect.y = 0;
-    glcd.rect.w = portrate ? dispdrv.height : dispdrv.width;
-    glcd.rect.h = portrate ? dispdrv.width : dispdrv.height;
+    glcdResetRect();
 }
 
 void glcdShift(int16_t pos)
@@ -154,6 +149,16 @@ void glcdSetRect(const GlcdRect *rect)
     glcd.rect.y = rect->y;
     glcd.rect.w = rect->w;
     glcd.rect.h = rect->h;
+}
+
+void glcdResetRect(void)
+{
+    bool portrate = (glcd.orientation & GLCD_PORTRATE);
+
+    glcd.rect.x = 0;
+    glcd.rect.y = 0;
+    glcd.rect.w = portrate ? dispdrv.height : dispdrv.width;
+    glcd.rect.h = portrate ? dispdrv.width : dispdrv.height;
 }
 
 GlcdRect *glcdGetRect(void)

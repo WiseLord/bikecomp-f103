@@ -61,6 +61,7 @@ void glcdSetIdle(bool value);
 void glcdFbSync(void);
 
 void glcdSetRect(const GlcdRect *rect);
+void glcdResetRect(void);
 GlcdRect *glcdGetRect(void);
 
 void glcdSetFont(const tFont *font);
