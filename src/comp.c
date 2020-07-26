@@ -72,16 +72,20 @@ static void compInitPins(void)
     LL_GPIO_AF_SetEXTISource(WHEEL_AR_ExtiPort, WHEEL_AR_ExtiLine);
     LL_EXTI_DisableEvent_0_31(WHEEL_ExtiLine);
     LL_EXTI_EnableIT_0_31(WHEEL_ExtiLine);
-    LL_EXTI_EnableRisingTrig_0_31(WHEEL_ExtiLine);
+    LL_EXTI_DisableRisingTrig_0_31(WHEEL_ExtiLine);
+    LL_EXTI_EnableFallingTrig_0_31(WHEEL_ExtiLine);
 
     LL_GPIO_AF_SetEXTISource(PEDAL_AR_ExtiPort, PEDAL_AR_ExtiLine);
     LL_EXTI_DisableEvent_0_31(PEDAL_ExtiLine);
     LL_EXTI_EnableIT_0_31(PEDAL_ExtiLine);
-    LL_EXTI_EnableRisingTrig_0_31(PEDAL_ExtiLine);
+    LL_EXTI_DisableRisingTrig_0_31(PEDAL_ExtiLine);
+    LL_EXTI_EnableFallingTrig_0_31(PEDAL_ExtiLine);
 }
 
 void compInit()
 {
+    settingsInit();
+
     compInitPins();
 
     canvasInit();
@@ -89,7 +93,7 @@ void compInit()
 
     inputInit();
 
-    comp.wLenMm = settingsGet(PARAM_COMP_WLENGTH);
+    comp.wLenMm = settingsGet(PARAM_BIKE_WHEEL_LEN);
 
     NVIC_SetPriority(EXTI9_5_IRQn, 0);
     NVIC_EnableIRQ(EXTI9_5_IRQn);
@@ -130,7 +134,7 @@ static void compActionHandle(void)
 
 static void compScreenShow(void)
 {
-    canvasShowComp(true);
+    canvasShowMain(true);
 }
 
 void compRun()

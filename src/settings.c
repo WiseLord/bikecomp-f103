@@ -18,8 +18,9 @@ static const EE_Cell eeMap[] = {
 //    [PARAM_SYSTEM_LANG]     =   {0x70,  LANG_DEFAULT},
     [PARAM_SYSTEM_RTC_CORR] =   {0x73,  0},
 
-    [PARAM_COMP_WLENGTH]     =   {0x7A,  2062},
-
+    [PARAM_BIKE_WHEEL_LEN]  =   {0x7A,  2062},
+    [PARAM_BIKE_PAR1]       =   {0x7B,  BIKEPAR_TRACK},
+    [PARAM_BIKE_PAR2]       =   {0x7C,  BIKEPAR_TRACK_TIME},
 };
 
 void settingsInit(void)
@@ -48,8 +49,15 @@ int16_t settingsGet(Param param)
     case PARAM_SYSTEM_RTC_CORR:
         ret = rtcCorr;
         break;
-    case PARAM_COMP_WLENGTH:
+
+    case PARAM_BIKE_WHEEL_LEN:
         ret = comp->wLenMm;
+        break;
+    case PARAM_BIKE_PAR1:
+        ret = comp->par1;
+        break;
+    case PARAM_BIKE_PAR2:
+        ret = comp->par2;
         break;
 
     default:
@@ -76,8 +84,14 @@ void settingsSet(Param param, int16_t value)
         rtcCorr = value;
         break;
 
-    case PARAM_COMP_WLENGTH:
+    case PARAM_BIKE_WHEEL_LEN:
         comp->wLenMm = value;
+        break;
+    case PARAM_BIKE_PAR1:
+        comp->par1 = value;
+        break;
+    case PARAM_BIKE_PAR2:
+        comp->par2= value;
         break;
 
     default:

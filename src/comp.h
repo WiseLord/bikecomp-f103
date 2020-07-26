@@ -20,21 +20,37 @@ extern "C" {
 #define PEDAL_AR_ExtiPort       LL_GPIO_AF_EXTI_PORTB
 #define PEDAL_AR_ExtiLine       LL_GPIO_AF_EXTI_LINE9
 
-typedef struct {
-    uint32_t wCntCurrTurn;          // Wheel counter in the current turn
-    uint32_t pCntCurrTurn;          // Pedal counter in the current turn
+typedef int8_t BikePar;
+enum {
+    BIKEPAR_SPEED = 0,
 
-    uint32_t wCntLastTurn;          // Wheel counter in the last full turn
-    uint32_t pCntLastTurn;          // Pedal counter in the last full turn
+    BIKEPAR_TRACK,
+    BIKEPAR_TRACK_TIME,
+    BIKEPAR_SPEED_AVG,
+    BIKEPAR_CADENCE,
+    BIKEPAR_DISTANCE,
+
+    BIKEPAR_END,
+};
+
+typedef struct {
+    uint32_t wCntCurrTurn;      // Wheel counter in the current turn
+    uint32_t pCntCurrTurn;      // Pedal counter in the current turn
+
+    uint32_t wCntLastTurn;      // Wheel counter in the last full turn
+    uint32_t pCntLastTurn;      // Pedal counter in the last full turn
 } CompPriv;
 
 typedef struct {
     CompPriv *priv;
 
-    int32_t wLenMm;                 // Length of wheel, mm
+    int32_t wLenMm;             // Length of wheel, mm
 
-    int32_t wTurns;                 // Number of wheel turns in the trip
-    int32_t pTurns;                 // Number of pedal turns in the trip
+    int32_t wTurns;             // Number of wheel turns in the trip
+    int32_t pTurns;             // Number of pedal turns in the trip
+
+    BikePar par1;
+    BikePar par2;
 } Comp;
 
 void compInit(void);

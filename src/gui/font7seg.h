@@ -44,6 +44,7 @@ extern const tFont7seg font_7seg_11;
 extern const tFont7seg font_7seg_10;
 extern const tFont7seg font_7seg_8;
 extern const tFont7seg font_7seg_7;
+extern const tFont7seg font_7seg_6;
 extern const tFont7seg font_7seg_5;
 extern const tFont7seg font_7seg_4;
 extern const tFont7seg font_7seg_3;

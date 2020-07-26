@@ -50,6 +50,7 @@ C_SOURCES += utils.c
 
 C_SOURCES += gui/canvas.c
 C_SOURCES += gui/font7seg.c
+C_SOURCES += gui/icons.c
 C_SOURCES += gui/palette.c
 
 # Display source files
@@ -239,6 +240,10 @@ clean:
 .PHONY: flash
 flash: $(BIN)
 	$(OPENOCD) -f $(OPENOCD_CFG) -c "stm_flash $(BIN)" -c shutdown
+
+.PHONY: erase
+erase:
+	$(OPENOCD) -f $(OPENOCD_CFG) -c "stm_erase" -c shutdown
 
 # Other dependencies
 -include $(OBJECTS:.o=.d)

@@ -61,6 +61,7 @@ void glcdSetIdle(bool value);
 void glcdFbSync(void);
 
 void glcdSetRect(const GlcdRect *rect);
+void glcdSetRectValues(int16_t x, int16_t y, int16_t w, int16_t h);
 void glcdResetRect(void);
 GlcdRect *glcdGetRect(void);
 

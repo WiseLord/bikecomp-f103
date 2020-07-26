@@ -96,6 +96,8 @@ src/gui/canvas.c
 src/gui/canvas.h
 src/gui/font7seg.c
 src/gui/font7seg.h
+src/gui/icons.c
+src/gui/icons.h
 src/gui/palette.c
 src/gui/palette.h
 src/hwlibs.h

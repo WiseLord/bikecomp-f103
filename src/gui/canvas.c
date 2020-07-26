@@ -4,12 +4,33 @@
 #include <stdio.h>
 
 #include "comp.h"
+#include "icons.h"
 #include "input.h"
 #include "font7seg.h"
 #include "rtc.h"
 #include "swtimers.h"
 
 static Canvas canvas;
+
+static const tImage *glcdFindIcon(Icon code, const tFont *iFont)
+{
+    const tImage *ret = NULL;
+
+    // Find icon pos
+    int32_t iPos = -1;
+    for (int16_t i = 0; i < iFont->length; i++) {
+        if (iFont->chars[i].code == (int32_t)code) {
+            iPos = i;
+            break;
+        }
+    }
+
+    if (iPos >= 0) {
+        ret = iFont->chars[iPos].image;
+    }
+
+    return  ret;
+}
 
 void canvasInit()
 {
@@ -39,134 +60,156 @@ void canvasClear()
     glcdSetFontBgColor(canvas.pal->bg);
 }
 
-static void drawTest(void)
+void drawTime(bool clear)
 {
-    int16_t x = 5;
-    int16_t y = 60;
+    char buf[10];
 
-    char buf[8];
+    RTC_type rtc;
+    rtcGetTime(&rtc);
 
-    Comp *comp = compGet();
-
+    glcdSetXY(0, 0);
     font7segLoad(font_7seg_3);
 
-    glcdSetXY(x, y);
-    snprintf(buf, sizeof(buf), "%5" PRId32, comp->wTurns);
+    snprintf(buf, sizeof(buf), "%02d", rtc.hour);
     font7segWriteString(buf);
 
-    glcdSetXY(x, y + 40);
-    snprintf(buf, sizeof(buf), "%5" PRId32, LL_TIM_GetCounter(TIM_COMP));
-    font7segWriteString(buf);
+    glcdSetFontColor(rtc.sec % 2 ? paletteGet()->bg : paletteGet()->fg);
+    font7segWriteChar(':');
+    glcdSetFontColor(paletteGet()->fg);
 
-    glcdSetXY(x, y + 80);
-    snprintf(buf, sizeof(buf), "%5" PRId32, comp->priv->wCntLastTurn);
-    font7segWriteString(buf);
-
-    glcdSetXY(x, y + 120);
-    snprintf(buf, sizeof(buf), "%5" PRId32, comp->priv->pCntLastTurn);
-    font7segWriteString(buf);
-
-    glcdSetXY(x, y + 120);
-    snprintf(buf, sizeof(buf), "%5" PRId32, swTimGet(SW_TIM_RTC_INIT));
+    snprintf(buf, sizeof(buf), "%02d", rtc.min);
     font7segWriteString(buf);
 }
 
-static void drawSpeed(void)
+static void drawSpeed(bool clear)
 {
-    int16_t x = 82;
-    int16_t y = 1;
-
     char buf[8];
 
     uint32_t speedMph = compGetSpeedMph();
 
+    glcdSetXY(0, 0);
     font7segLoad(font_7seg_10);
-    glcdSetXY(x, y);
-    snprintf(buf, sizeof(buf), "%2u", (unsigned)(speedMph / 1000));
+    snprintf(buf, sizeof(buf), "%02u", (unsigned)(speedMph / 1000));
     font7segWriteString(buf);
 
+    glcdSetY(3);
     font7segLoad(font_7seg_7);
-    glcdSetXY(x + 122, y + 27);
-    snprintf(buf, sizeof(buf), "%1u", (unsigned)(speedMph % 1000 / 100));
+    snprintf(buf, sizeof(buf), ".%1u", (unsigned)(speedMph % 1000 / 100));
     font7segWriteString(buf);
+
+    glcdSetXY(glcdGet()->x - 56, 70);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "km/h");
+    glcdWriteString(buf);
 }
 
-
-
-void drawTime(void)
+static void drawSpeedIcons(bool clear)
 {
-    int16_t x = 70;
-    int16_t y = 280;
+    const tImage *img;
 
-    RTC_type rtc;
-    char buf[10];
+    glcdSetXY(0, 0);
+    img = glcdFindIcon(ICON_ABOVE, &bikecompicons);
+    glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
 
-    rtcGetTime(&rtc);
-
-    font7segLoad(font_7seg_4);
-    glcdSetXY(x, y);
-    snprintf(buf, sizeof(buf), "%02d:%02d:%02d", rtc.hour, rtc.min, rtc.sec);
-
-    font7segWriteString(buf);
+    glcdSetXY(0, 30);
+    img = glcdFindIcon(ICON_BELOW, &bikecompicons);
+    glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
 }
 
-void drawTrackLen()
+static void drawTrackLen()
 {
-    int16_t x = 100;
-    int16_t y = 120;
+    char buf[32];
 
-    char buf[8];
+    glcdSetXY(3, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Track length");
+    glcdWriteString(buf);
 
-    font7segLoad(font_7seg_5);
-    glcdSetXY(x, y);
+    font7segLoad(font_7seg_6);
+    glcdSetXY(75, 28);
     snprintf(buf, sizeof(buf), "%03d", 328);
     font7segWriteString(buf);
 
-    font7segLoad(font_7seg_3);
-    glcdSetXY(x + 90, y + 18);
-    snprintf(buf, sizeof(buf), ".%02d", 35);
-    font7segWriteString(buf);
-
-    font7segLoad(font_7seg_3);
-    glcdSetXY(x + 90, y + 18);
+    font7segLoad(font_7seg_4);
     snprintf(buf, sizeof(buf), ".%02d", 35);
     font7segWriteString(buf);
 }
 
-void drawTrackTime()
+static void drawTrackTime()
 {
-    char buf[8];
-    int16_t x = 55;
-    int16_t y = 190;
+    char buf[32];
 
-    font7segLoad(font_7seg_5);
-    glcdSetXY(x, y);
-    snprintf(buf, sizeof(buf), "%02d:%02d", 32, 26);
+    glcdSetXY(3, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Track time");
+    glcdWriteString(buf);
+
+    font7segLoad(font_7seg_6);
+    glcdSetXY(26, 28);
+    snprintf(buf, sizeof(buf), "%02d:%02d", 21, 26);
     font7segWriteString(buf);
 
-    font7segLoad(font_7seg_3);
-    glcdSetXY(x + 130, y + 18);
-    snprintf(buf, sizeof(buf), ".%02d", 33);
+    font7segLoad(font_7seg_4);
+    snprintf(buf, sizeof(buf), ".%02d", 27);
 
     font7segWriteString(buf);
 }
 
-void canvasShowComp(bool clear)
+void canvasShowMain(bool clear)
 {
     const Palette *pal = paletteGet();
+    Comp *comp = compGet();
 
+    glcdResetRect();
     glcdSetFontColor(pal->fg);
     glcdSetFontBgColor(pal->bg);
 
-    drawSpeed();
+
+    glcdSetRectValues(4, 4, 75, 27);
+//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
+    drawTime(clear);
 
     if (clear) {
-//        glcdDrawRect(5, 178, 230, 2, COLOR_BLACK);
+        glcdResetRect();
+        glcdDrawRect(3, 35, 234, 2, COLOR_BLACK);
     }
 
-    drawTest();
+    glcdSetRectValues(67, 41, 169, 90);
+//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
+    drawSpeed(clear);
 
-    drawTime();
-//    drawTrackLen();
-//    drawTrackTime();
+    glcdSetRectValues(15, 57, 24, 54);
+    drawSpeedIcons(clear);
+
+    if (clear) {
+        glcdResetRect();
+        glcdDrawRect(3, 135, 234, 2, COLOR_BLACK);
+    }
+
+    glcdSetRectValues(0, 141, 240, 82);
+//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
+
+    switch (comp->par1) {
+    case BIKEPAR_TRACK:
+        drawTrackLen();
+        break;
+    default:
+        break;
+    }
+
+    if (clear) {
+        glcdResetRect();
+        glcdDrawRect(3, 228, 234, 2, COLOR_BLACK);
+    }
+
+    glcdSetRectValues(0, 234, 240, 82);
+//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
+
+    switch (comp->par2) {
+    case BIKEPAR_TRACK_TIME:
+        drawTrackTime();
+        break;
+    default:
+        break;
+    }
 }

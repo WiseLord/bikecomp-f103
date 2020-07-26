@@ -151,6 +151,14 @@ void glcdSetRect(const GlcdRect *rect)
     glcd.rect.h = rect->h;
 }
 
+void glcdSetRectValues(int16_t x, int16_t y, int16_t w, int16_t h)
+{
+    glcd.rect.x = x;
+    glcd.rect.y = y;
+    glcd.rect.w = w;
+    glcd.rect.h = h;
+}
+
 void glcdResetRect(void)
 {
     bool portrate = (glcd.orientation & GLCD_PORTRATE);

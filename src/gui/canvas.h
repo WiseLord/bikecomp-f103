@@ -20,7 +20,7 @@ Canvas *canvasGet(void);
 
 void canvasClear(void);
 
-void canvasShowComp(bool clear);
+void canvasShowMain(bool clear);
 
 #ifdef __cplusplus
 }

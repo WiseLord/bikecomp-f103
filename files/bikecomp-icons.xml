@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data name="bikecomp-icons" type="font">
+    <family>Liberation Sans</family>
+    <size>14</size>
+    <ascent>18</ascent>
+    <descent>13</descent>
+    <style>Bold</style>
+    <widthType>proportional</widthType>
+    <antialiasing>false</antialiasing>
+    <foreground>ff000000</foreground>
+    <background>ffffffff</background>
+    <multiplicityWidth>1</multiplicityWidth>
+    <multiplicityHeight>1</multiplicityHeight>
+    <string>\x0000\x0001\x0002</string>
+    <converted>/home/STM32/Projects/bikecomp-f103/src/gui/icons.c</converted>
+    <chars>
+        <char character="\x0000" code="0000">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAaklEQVQ4jc3UOw7AIAwD0KT3v3M6sFQ02AHFEp6QyOcNCI8Ig3F3M6NlD76uhwwanO/hcFA9aNCkwCi9KN0PUGIR2Ly6Uorok0kLZCLKWZVpREVOWiwQbXH+Ld2iA87U2Cbin3FxSJ/ourzrTwxXlwkK+QAAAABJRU5ErkJggg==</picture>
+        </char>
+        <char character="\x0001" code="0001">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAZUlEQVQ4jc3SSwoAIAgE0KH739kWQUSZfXQit+XMgwK+GxEJCUn+lDIJblRZDxXBgaqL0SJcodoVggiHqO4yRzT2bHKUoOtRgpYo9QJTNOu0j8iiWbMh5YvGfvs1n4haxfJzhYkyLc9B6T+mMJkAAAAASUVORK5CYII=</picture>
+        </char>
+        <char character="\x0002" code="0002">
+            <picture format="png">iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAIklEQVQ4jWP8//8/AzUAE1VMGTVo1KBRg0YNGjVo1CCKAAAZ0QMtv0CUsgAAAABJRU5ErkJggg==</picture>
+        </char>
+    </chars>
+</data>
