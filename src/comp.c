@@ -1,19 +1,61 @@
 #include "comp.h"
 
+#include "action.h"
 #include "gui/canvas.h"
 #include "hwlibs.h"
 #include "input.h"
+#include "rtc.h"
+#include "settings.h"
 #include "swtimers.h"
 #include "timers.h"
 
 #define ANTIBOUNCE  100
 
+#define FLAG_EXIT           0
+#define FLAG_ENTER          1
+#define FLAG_SWITCH         2
+
 static CompPriv priv;
 static Comp comp = { .priv = &priv };
+
+static Action action = {
+    .type = ACTION_NONE,
+    .value = FLAG_ENTER,
+};
+
+static void actionGetButtons(void);
+static void actionGetTimers(void);
 
 static void compActionGet(void);
 static void compActionHandle(void);
 static void compScreenShow(void);
+
+static void actionSet(ActionType type, int16_t value)
+{
+    action.type = type;
+    action.value = value;
+}
+
+static void actionGetButtons(void)
+{
+    CmdBtn cmdBtn = inputGetBtnCmd();
+
+    if (cmdBtn.btn) {
+        if (cmdBtn.flags & BTN_FLAG_LONG_PRESS) {
+            actionSet(ACTION_BTN_LONG, (int16_t)cmdBtn.btn);
+        } else {
+            actionSet(ACTION_BTN_SHORT, (int16_t)cmdBtn.btn);
+        }
+    }
+}
+static void actionGetTimers(void)
+{
+    if (swTimGet(SW_TIM_DISPLAY) == 0) {
+        actionSet(ACTION_DISP_EXPIRED, 0);
+    } else if (swTimGet(SW_TIM_RTC_INIT) == 0) {
+        actionSet(ACTION_INIT_RTC, 0);
+    }
+}
 
 static void compInitPins(void)
 {
@@ -47,13 +89,15 @@ void compInit()
 
     inputInit();
 
-    comp.wLenMm = 2062; // TODO: Read from settings
+    comp.wLenMm = settingsGet(PARAM_COMP_WLENGTH);
 
     NVIC_SetPriority(EXTI9_5_IRQn, 0);
     NVIC_EnableIRQ(EXTI9_5_IRQn);
 
     timerInit(TIM_COMP, 7199, 65535);   // 10k counts/sec, reset after 6.5 seconds
+
     swTimInit();
+    rtcInit();
 
     swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, SW_TIM_ON);
     swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, SW_TIM_ON);
@@ -66,12 +110,22 @@ Comp *compGet()
 
 static void compActionGet(void)
 {
+    if (ACTION_NONE == action.type) {
+        actionGetButtons();
+    }
 
+    if (ACTION_NONE == action.type) {
+        actionGetTimers();
+    }
 }
 
 static void compActionHandle(void)
 {
-
+    switch (action.type) {
+    case ACTION_INIT_RTC:
+        rtcInit();
+        break;
+    }
 }
 
 static void compScreenShow(void)

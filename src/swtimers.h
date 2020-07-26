@@ -17,6 +17,8 @@ enum {
     SW_TIM_WHEEL_ANTIBOUNCE,
     SW_TIM_PEDAL_ANTIBOUNCE,
 
+    SW_TIM_RTC_INIT,
+
     SW_TIM_DEC_END,
 
     // Increasing timers

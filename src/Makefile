@@ -39,8 +39,11 @@ C_DEFS += -D_DISP_RST_ENABLED
 C_SOURCES += main.c
 
 C_SOURCES += comp.c
+C_SOURCES += eemul.c
 C_SOURCES += input.c
+C_SOURCES += rtc.c
 C_SOURCES += spi.c
+C_SOURCES += settings.c
 C_SOURCES += swtimers.c
 C_SOURCES += timers.c
 C_SOURCES += utils.c
@@ -139,6 +142,7 @@ C_INCLUDES += \
 C_SOURCES += \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_gpio.c \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_rcc.c \
+  drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_rtc.c \
   drivers/$(STM32_FAMILY)xx_HAL_Driver/Src/$(call lc, $(STM32_FAMILY))xx_ll_utils.c \
   system/system_$(call lc, $(STM32_FAMILY))xx.c
 

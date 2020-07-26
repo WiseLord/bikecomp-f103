@@ -6,6 +6,8 @@
 #include "comp.h"
 #include "input.h"
 #include "font7seg.h"
+#include "rtc.h"
+#include "swtimers.h"
 
 static Canvas canvas;
 
@@ -40,7 +42,7 @@ void canvasClear()
 static void drawTest(void)
 {
     int16_t x = 5;
-    int16_t y = 100;
+    int16_t y = 60;
 
     char buf[8];
 
@@ -62,6 +64,10 @@ static void drawTest(void)
 
     glcdSetXY(x, y + 120);
     snprintf(buf, sizeof(buf), "%5" PRId32, comp->priv->pCntLastTurn);
+    font7segWriteString(buf);
+
+    glcdSetXY(x, y + 120);
+    snprintf(buf, sizeof(buf), "%5" PRId32, swTimGet(SW_TIM_RTC_INIT));
     font7segWriteString(buf);
 }
 
@@ -89,12 +95,17 @@ static void drawSpeed(void)
 
 void drawTime(void)
 {
-    font7segLoad(font_7seg_5);
+    int16_t x = 70;
+    int16_t y = 280;
 
-    glcdSetXY(70, 250);
+    RTC_type rtc;
+    char buf[10];
 
-    char buf[8];
-    snprintf(buf, sizeof(buf), "%02d:%02d", 21, 30);
+    rtcGetTime(&rtc);
+
+    font7segLoad(font_7seg_4);
+    glcdSetXY(x, y);
+    snprintf(buf, sizeof(buf), "%02d:%02d:%02d", rtc.hour, rtc.min, rtc.sec);
 
     font7segWriteString(buf);
 }
@@ -155,7 +166,7 @@ void canvasShowComp(bool clear)
 
     drawTest();
 
-//    drawTime();
+    drawTime();
 //    drawTrackLen();
 //    drawTrackTime();
 }
