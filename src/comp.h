@@ -51,6 +51,9 @@ typedef struct {
 
     BikePar par1;
     BikePar par2;
+    bool inMove;
+
+    int32_t trackTime;          // Track time when moving, sec
 } Comp;
 
 void compInit(void);
@@ -58,7 +61,9 @@ Comp *compGet();
 
 void compRun(void);
 
-uint32_t compGetSpeedMph(void);    // Get speed in m/hour
+int32_t compGetSpeedMph(void);      // Get speed in m/hour
+int32_t compGetTrackLengthM(void);  // Get track length in meters
+int32_t compGetTrackTime(void);     // Get track time in seconds
 
 #ifdef __cplusplus
 }

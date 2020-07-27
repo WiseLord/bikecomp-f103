@@ -85,16 +85,16 @@ static void drawSpeed(bool clear)
 {
     char buf[8];
 
-    uint32_t speedMph = compGetSpeedMph();
+    int32_t speedMph = compGetSpeedMph();
 
     glcdSetXY(0, 0);
     font7segLoad(font_7seg_10);
-    snprintf(buf, sizeof(buf), "%02u", (unsigned)(speedMph / 1000));
+    snprintf(buf, sizeof(buf), "%2d", (int)(speedMph / 1000));
     font7segWriteString(buf);
 
     glcdSetY(3);
     font7segLoad(font_7seg_7);
-    snprintf(buf, sizeof(buf), ".%1u", (unsigned)(speedMph % 1000 / 100));
+    snprintf(buf, sizeof(buf), ".%1d", (int)(speedMph % 1000 / 100));
     font7segWriteString(buf);
 
     glcdSetXY(glcdGet()->x - 56, 70);
@@ -120,6 +120,8 @@ static void drawTrackLen()
 {
     char buf[32];
 
+    int32_t trackLengthM = compGetTrackLengthM();
+
     glcdSetXY(3, 0);
     glcdSetFont(&fontterminus24b);
     snprintf(buf, sizeof(buf), "%s", "Track length");
@@ -127,17 +129,28 @@ static void drawTrackLen()
 
     font7segLoad(font_7seg_6);
     glcdSetXY(75, 28);
-    snprintf(buf, sizeof(buf), "%03d", 328);
+    snprintf(buf, sizeof(buf), "%3d", (int)(trackLengthM / 1000));
     font7segWriteString(buf);
 
     font7segLoad(font_7seg_4);
-    snprintf(buf, sizeof(buf), ".%02d", 35);
+    snprintf(buf, sizeof(buf), ".%02d", (int)(trackLengthM % 1000 / 10));
     font7segWriteString(buf);
 }
 
 static void drawTrackTime()
 {
     char buf[32];
+
+    int32_t trackTime = compGetTrackTime();
+
+    int8_t seconds = trackTime % 60;
+    trackTime /= 60;
+    int8_t minutes = trackTime % 60;
+    trackTime /= 60;
+    int8_t hours = trackTime % 24;
+    trackTime /= 24;
+
+    // TODO: selecte between HH:MM:ss and DD:HH:mm
 
     glcdSetXY(3, 0);
     glcdSetFont(&fontterminus24b);
@@ -146,11 +159,11 @@ static void drawTrackTime()
 
     font7segLoad(font_7seg_6);
     glcdSetXY(26, 28);
-    snprintf(buf, sizeof(buf), "%02d:%02d", 21, 26);
+    snprintf(buf, sizeof(buf), "%2d:%02d", hours, minutes);
     font7segWriteString(buf);
 
     font7segLoad(font_7seg_4);
-    snprintf(buf, sizeof(buf), ".%02d", 27);
+    snprintf(buf, sizeof(buf), ".%02d", seconds);
 
     font7segWriteString(buf);
 }

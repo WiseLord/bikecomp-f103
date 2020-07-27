@@ -82,6 +82,13 @@ static void compInitPins(void)
     LL_EXTI_EnableFallingTrig_0_31(PEDAL_ExtiLine);
 }
 
+static void compSecondsCb(void)
+{
+    if (comp.inMove) {
+        comp.trackTime++;
+    }
+}
+
 void compInit()
 {
     settingsInit();
@@ -102,6 +109,7 @@ void compInit()
 
     swTimInit();
     rtcInit();
+    rtcSetCb(compSecondsCb);
 
     swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, SW_TIM_ON);
     swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, SW_TIM_ON);
@@ -146,7 +154,7 @@ void compRun()
     }
 }
 
-uint32_t compGetSpeedMph(void)
+int32_t compGetSpeedMph(void)
 {
     /*
      * Counter freq = 10000 counts / 1 sec = wCntLastTurn / time(sec)
@@ -157,11 +165,22 @@ uint32_t compGetSpeedMph(void)
      * Speed(m/h) = wLenMm * 36000 / wCntLastTurn
      */
 
-    uint32_t speedMph = comp.wLenMm * 36000 / priv.wCntLastTurn;
-
-    return speedMph;
+    return comp.wLenMm * 36000 / priv.wCntLastTurn;
 }
 
+int32_t compGetTrackLengthM(void)
+{
+    /*
+     * Track length (mm) = wLenMm * wTurns;
+     */
+
+    return comp.wLenMm * comp.wTurns / 1000;
+}
+
+int32_t compGetTrackTime(void)
+{
+    return comp.trackTime;
+}
 
 static void compWheelCb(void)
 {
@@ -182,6 +201,7 @@ static void compWheelCb(void)
     swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, ANTIBOUNCE);
 
     comp.wTurns++;
+    comp.inMove = true;
 }
 
 static void compPedalCb(void)
@@ -203,12 +223,14 @@ static void compPedalCb(void)
     swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, ANTIBOUNCE);
 
     comp.pTurns++;
+    comp.inMove = true;
 }
 
 static void compTimCb(void)
 {
     comp.wTurns = 0;
     comp.pTurns = 0;
+    comp.inMove = false;
 }
 
 void EXTI_COMP_HANDLER()
