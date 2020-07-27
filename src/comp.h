@@ -64,6 +64,7 @@ void compRun(void);
 int32_t compGetSpeedMph(void);      // Get speed in m/hour
 int32_t compGetTrackLengthM(void);  // Get track length in meters
 int32_t compGetTrackTime(void);     // Get track time in seconds
+int32_t compGetAvgSpeedMph(void);   // Get average speed in m/hour
 
 #ifdef __cplusplus
 }

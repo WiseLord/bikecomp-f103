@@ -165,6 +165,10 @@ int32_t compGetSpeedMph(void)
      * Speed(m/h) = wLenMm * 36000 / wCntLastTurn
      */
 
+    if (!comp.inMove) {
+        return 0;
+    }
+
     return comp.wLenMm * 36000 / priv.wCntLastTurn;
 }
 
@@ -180,6 +184,20 @@ int32_t compGetTrackLengthM(void)
 int32_t compGetTrackTime(void)
 {
     return comp.trackTime;
+}
+
+int32_t compGetAvgSpeedMph(void)
+{
+    /*
+     * AvgSpeed(m/sec) = trackLen(m) / tracTime(sec)
+     * so, avgSpeed (km/h) = trackLen(m) / trackTime(sec) * 3600(sec)
+     */
+
+    if (comp.trackTime < 30) {
+        return 0;
+    }
+
+    return comp.wLenMm * comp.wTurns * 36 / comp.trackTime / 10;
 }
 
 static void compWheelCb(void)
@@ -228,8 +246,6 @@ static void compPedalCb(void)
 
 static void compTimCb(void)
 {
-    comp.wTurns = 0;
-    comp.pTurns = 0;
     comp.inMove = false;
 }
 

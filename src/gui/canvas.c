@@ -120,7 +120,28 @@ static void drawTrackLen()
 {
     char buf[32];
 
-    int32_t trackLengthM = compGetTrackLengthM();
+    int32_t trackLengthM = compGetAvgSpeedMph();
+
+    glcdSetXY(3, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Track length");
+    glcdWriteString(buf);
+
+    font7segLoad(font_7seg_6);
+    glcdSetXY(75, 28);
+    snprintf(buf, sizeof(buf), "%3d", (int)(trackLengthM / 1000));
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_4);
+    snprintf(buf, sizeof(buf), ".%02d", (int)(trackLengthM % 1000 / 10));
+    font7segWriteString(buf);
+}
+
+static void drawAvgSpeed()
+{
+    char buf[32];
+
+    int32_t trackLengthM = compGetAvgSpeedMph();
 
     glcdSetXY(3, 0);
     glcdSetFont(&fontterminus24b);
@@ -168,6 +189,23 @@ static void drawTrackTime()
     font7segWriteString(buf);
 }
 
+static void drawBikeParam(BikePar param)
+{
+    switch (param) {
+    case BIKEPAR_TRACK:
+        drawTrackLen();
+        break;
+    case BIKEPAR_TRACK_TIME:
+        drawTrackTime();
+        break;
+    case BIKEPAR_SPEED_AVG:
+        drawAvgSpeed();
+        break;
+    default:
+        break;
+    }
+}
+
 void canvasShowMain(bool clear)
 {
     const Palette *pal = paletteGet();
@@ -202,13 +240,7 @@ void canvasShowMain(bool clear)
     glcdSetRectValues(0, 141, 240, 82);
 //    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
 
-    switch (comp->par1) {
-    case BIKEPAR_TRACK:
-        drawTrackLen();
-        break;
-    default:
-        break;
-    }
+    drawBikeParam(comp->par1);
 
     if (clear) {
         glcdResetRect();
@@ -218,11 +250,5 @@ void canvasShowMain(bool clear)
     glcdSetRectValues(0, 234, 240, 82);
 //    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
 
-    switch (comp->par2) {
-    case BIKEPAR_TRACK_TIME:
-        drawTrackTime();
-        break;
-    default:
-        break;
-    }
+    drawBikeParam(comp->par2);
 }
