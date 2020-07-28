@@ -25,27 +25,21 @@ F 3 "~" H 8950 2150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8450 1650 8750 1650
+	8400 1650 8650 1650
 Wire Wire Line
-	8450 1750 8750 1750
+	8400 2050 8750 2050
 Wire Wire Line
-	8450 1950 8750 1950
+	8400 2150 8750 2150
 Wire Wire Line
-	8450 2050 8750 2050
+	8400 2250 8750 2250
 Wire Wire Line
-	8450 2150 8750 2150
+	8400 2350 8750 2350
 Wire Wire Line
-	8450 2250 8750 2250
+	8400 2550 8750 2550
 Wire Wire Line
-	8450 2350 8750 2350
+	8400 2650 8750 2650
 Wire Wire Line
-	8450 2450 8750 2450
-Wire Wire Line
-	8450 2550 8750 2550
-Wire Wire Line
-	8450 2650 8750 2650
-Wire Wire Line
-	8450 2750 8750 2750
+	8400 2750 8750 2750
 Wire Wire Line
 	9250 2550 9550 2550
 Wire Wire Line
@@ -53,46 +47,32 @@ Wire Wire Line
 Wire Wire Line
 	9250 2750 9550 2750
 Wire Wire Line
-	9250 2250 9550 2250
-Wire Wire Line
 	9250 2350 9550 2350
 Wire Wire Line
 	9250 2450 9550 2450
-Wire Wire Line
-	9250 1950 9550 1950
 Wire Wire Line
 	9250 2050 9550 2050
 Wire Wire Line
 	9250 2150 9550 2150
 Wire Wire Line
-	9250 1650 9550 1650
-Wire Wire Line
-	9250 1750 9550 1750
-Wire Wire Line
 	9250 1850 9550 1850
-Text Label 8450 1650 0    50   ~ 0
-LED
-Text Label 8450 1750 0    50   ~ 0
-LED
-Text Label 8450 1850 0    50   ~ 0
+Text Label 8400 1650 0    50   ~ 0
+LED_P
+Text Label 8400 1850 0    50   ~ 0
 2.8V
-Text Label 8450 1950 0    50   ~ 0
-GND
-Text Label 8450 2050 0    50   ~ 0
+Text Label 8400 2050 0    50   ~ 0
 RD
-Text Label 8450 2150 0    50   ~ 0
+Text Label 8400 2150 0    50   ~ 0
 RS
-Text Label 8450 2250 0    50   ~ 0
+Text Label 8400 2250 0    50   ~ 0
 D1
-Text Label 8450 2350 0    50   ~ 0
+Text Label 8400 2350 0    50   ~ 0
 D3
-Text Label 8450 2450 0    50   ~ 0
-GND
-Text Label 8450 2550 0    50   ~ 0
+Text Label 8400 2550 0    50   ~ 0
 D5
-Text Label 8450 2650 0    50   ~ 0
+Text Label 8400 2650 0    50   ~ 0
 D7
-Text Label 8450 2750 0    50   ~ 0
+Text Label 8400 2750 0    50   ~ 0
 TE
 Text Label 9550 2750 2    50   ~ 0
 RST
@@ -104,35 +84,27 @@ Text Label 9550 2450 2    50   ~ 0
 D4
 Text Label 9550 2350 2    50   ~ 0
 D2
-Text Label 9550 2250 2    50   ~ 0
-GND
 Text Label 9550 2150 2    50   ~ 0
 D0
 Text Label 9550 2050 2    50   ~ 0
 WR
-Text Label 9550 1950 2    50   ~ 0
-GND
 Text Label 9550 1850 2    50   ~ 0
 VIO
-Text Label 9550 1750 2    50   ~ 0
-LED
-Text Label 9550 1650 2    50   ~ 0
-LED
 $Comp
 L power:GNDD #PWR?
 U 1 1 5F0B7E14
-P 2500 2150
-F 0 "#PWR?" H 2500 1900 50  0001 C CNN
-F 1 "GNDD" H 2504 1995 50  0000 C CNN
-F 2 "" H 2500 2150 50  0001 C CNN
-F 3 "" H 2500 2150 50  0001 C CNN
-	1    2500 2150
+P 2500 2850
+F 0 "#PWR?" H 2500 2600 50  0001 C CNN
+F 1 "GNDD" H 2504 2695 50  0000 C CNN
+F 2 "" H 2500 2850 50  0001 C CNN
+F 3 "" H 2500 2850 50  0001 C CNN
+	1    2500 2850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2500 2150 2500 2000
+	2500 2850 2500 2700
 Wire Wire Line
-	2500 1350 2500 1700
+	2500 2050 2500 2400
 Wire Wire Line
 	6100 1350 6700 1350
 Wire Wire Line
@@ -142,7 +114,7 @@ L Regulator_Linear:AMS1117-3.3 U?
 U 1 1 5F0BF98F
 P 5800 1350
 F 0 "U?" H 5800 1592 50  0000 C CNN
-F 1 "AMS1117-3.3" H 5800 1501 50  0000 C CNN
+F 1 "AMS1117-2.5" H 5800 1501 50  0000 C CNN
 F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 5800 1550 50  0001 C CNN
 F 3 "http://www.advanced-monolithic.com/pdf/ds1117.pdf" H 5900 1100 50  0001 C CNN
 	1    5800 1350
@@ -161,19 +133,6 @@ F 3 "" H 5800 1950 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5800 1950 5800 1650
-$Comp
-L Regulator_Switching:MT3608 U?
-U 1 1 5F0C489A
-P 3900 1450
-F 0 "U?" H 3900 1817 50  0000 C CNN
-F 1 "MT3608" H 3900 1726 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23-6" H 3950 1200 50  0001 L CIN
-F 3 "https://www.olimex.com/Products/Breadboarding/BB-PWR-3608/resources/MT3608.pdf" H 3650 1900 50  0001 C CNN
-	1    3900 1450
-	1    0    0    -1  
-$EndComp
-Text Label 4750 1350 2    50   ~ 0
-10V
 $Comp
 L Device:R R?
 U 1 1 5F0C59A2
@@ -222,19 +181,9 @@ F 3 "" H 1750 4750 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	1750 4750 1750 4700
+Connection ~ 2500 2050
 Wire Wire Line
-	4750 1350 4200 1350
-Wire Wire Line
-	5500 1350 5300 1350
-Wire Wire Line
-	5300 1350 5300 850 
-Wire Wire Line
-	5300 850  2500 850 
-Wire Wire Line
-	2500 850  2500 1350
-Connection ~ 2500 1350
-Wire Wire Line
-	3600 1550 3450 1550
+	3400 2250 3250 2250
 Wire Wire Line
 	7100 3900 7350 3900
 Text Label 7350 3900 2    50   ~ 0
@@ -417,9 +366,9 @@ Connection ~ 1750 3900
 Wire Wire Line
 	1750 3900 1750 3950
 Wire Wire Line
-	5800 3500 3450 3500
+	5800 3500 3250 3500
 Wire Wire Line
-	3450 1550 3450 3500
+	3250 2250 3250 3500
 Wire Wire Line
 	6700 1850 6700 2500
 Connection ~ 6700 1850
@@ -530,20 +479,18 @@ Wire Wire Line
 $Comp
 L Device:Battery_Cell BT?
 U 1 1 5F0B6E4F
-P 2500 1900
-F 0 "BT?" H 2618 1996 50  0000 L CNN
-F 1 "4.2V" H 2618 1905 50  0000 L CNN
-F 2 "" V 2500 1960 50  0001 C CNN
-F 3 "~" V 2500 1960 50  0001 C CNN
-	1    2500 1900
+P 2500 2600
+F 0 "BT?" H 2618 2696 50  0000 L CNN
+F 1 "4.2V" H 2618 2605 50  0000 L CNN
+F 2 "" V 2500 2660 50  0001 C CNN
+F 3 "~" V 2500 2660 50  0001 C CNN
+	1    2500 2600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2500 1350 3600 1350
+	2500 2050 1750 2050
 Wire Wire Line
-	2500 1350 1750 1350
-Wire Wire Line
-	1750 1350 1750 3550
+	1750 2050 1750 3550
 Wire Wire Line
 	5800 4700 5000 4700
 $Comp
@@ -591,8 +538,6 @@ Connection ~ 2550 4000
 Wire Wire Line
 	2550 4000 2550 4050
 Wire Wire Line
-	2050 4500 2100 4500
-Wire Wire Line
 	3050 4750 2850 4750
 Wire Wire Line
 	7100 5400 7300 5400
@@ -623,15 +568,235 @@ F 3 "~" H 2550 3600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2100 6100 2100 4500
+	3050 6100 3050 4750
+$Comp
+L Regulator_Switching:MT3608 U?
+U 1 1 5F0C489A
+P 3700 2150
+F 0 "U?" H 3700 2517 50  0000 C CNN
+F 1 "MT3608" H 3700 2426 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-6" H 3750 1900 50  0001 L CIN
+F 3 "https://www.olimex.com/Products/Breadboarding/BB-PWR-3608/resources/MT3608.pdf" H 3450 2600 50  0001 C CNN
+	1    3700 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F20B1E4
+P 3700 2600
+F 0 "#PWR?" H 3700 2350 50  0001 C CNN
+F 1 "GNDD" H 3704 2445 50  0000 C CNN
+F 2 "" H 3700 2600 50  0001 C CNN
+F 3 "" H 3700 2600 50  0001 C CNN
+	1    3700 2600
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	2100 6100 7300 6100
+	3700 2600 3700 2450
 Wire Wire Line
-	7700 4700 7700 6350
+	2500 1350 2500 2050
 Wire Wire Line
-	7700 6350 3050 6350
+	2500 1350 5500 1350
+$Comp
+L Device:L L?
+U 1 1 5F225989
+P 3700 1650
+F 0 "L?" V 3890 1650 50  0000 C CNN
+F 1 "10uH" V 3799 1650 50  0000 C CNN
+F 2 "" H 3700 1650 50  0001 C CNN
+F 3 "~" H 3700 1650 50  0001 C CNN
+	1    3700 1650
+	0    -1   -1   0   
+$EndComp
 Wire Wire Line
-	3050 6350 3050 4750
+	3850 1650 4100 1650
 Wire Wire Line
-	7100 4700 7700 4700
+	4100 1650 4100 2050
+Wire Wire Line
+	4100 2050 4000 2050
+Wire Wire Line
+	3550 1650 3250 1650
+Wire Wire Line
+	3250 1650 3250 2050
+Connection ~ 3250 2050
+Wire Wire Line
+	3250 2050 3400 2050
+$Comp
+L Device:D_Schottky D?
+U 1 1 5F231391
+P 4300 1650
+F 0 "D?" H 4300 1433 50  0000 C CNN
+F 1 "D_Schottky" H 4300 1524 50  0000 C CNN
+F 2 "" H 4300 1650 50  0001 C CNN
+F 3 "~" H 4300 1650 50  0001 C CNN
+	1    4300 1650
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4150 1650 4100 1650
+Connection ~ 4100 1650
+$Comp
+L Device:C C?
+U 1 1 5F23C8C5
+P 4550 2000
+F 0 "C?" H 4665 2046 50  0000 L CNN
+F 1 "1.0" H 4665 1955 50  0000 L CNN
+F 2 "" H 4588 1850 50  0001 C CNN
+F 3 "~" H 4550 2000 50  0001 C CNN
+	1    4550 2000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 1650 4550 1650
+Wire Wire Line
+	4550 1650 4550 1850
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F2427C0
+P 4550 2300
+F 0 "#PWR?" H 4550 2050 50  0001 C CNN
+F 1 "GNDD" H 4554 2145 50  0000 C CNN
+F 2 "" H 4550 2300 50  0001 C CNN
+F 3 "" H 4550 2300 50  0001 C CNN
+	1    4550 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 2150 4550 2300
+$Comp
+L Device:CP C?
+U 1 1 5F248CBD
+P 2950 2550
+F 0 "C?" H 3068 2596 50  0000 L CNN
+F 1 "4.7" H 3068 2505 50  0000 L CNN
+F 2 "" H 2988 2400 50  0001 C CNN
+F 3 "~" H 2950 2550 50  0001 C CNN
+	1    2950 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2950 2400 2950 2050
+Wire Wire Line
+	2500 2050 2950 2050
+Connection ~ 2950 2050
+Wire Wire Line
+	2950 2050 3250 2050
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F24EEE0
+P 2950 2850
+F 0 "#PWR?" H 2950 2600 50  0001 C CNN
+F 1 "GNDD" H 2954 2695 50  0000 C CNN
+F 2 "" H 2950 2850 50  0001 C CNN
+F 3 "" H 2950 2850 50  0001 C CNN
+	1    2950 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2950 2850 2950 2700
+Wire Wire Line
+	5000 1650 4550 1650
+Connection ~ 4550 1650
+$Comp
+L Device:R R?
+U 1 1 5F2781F6
+P 4150 2800
+F 0 "R?" H 4220 2846 50  0000 L CNN
+F 1 "47" H 4220 2755 50  0000 L CNN
+F 2 "" V 4080 2800 50  0001 C CNN
+F 3 "~" H 4150 2800 50  0001 C CNN
+	1    4150 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F27E74F
+P 4150 3050
+F 0 "#PWR?" H 4150 2800 50  0001 C CNN
+F 1 "GNDD" H 4154 2895 50  0000 C CNN
+F 2 "" H 4150 3050 50  0001 C CNN
+F 3 "" H 4150 3050 50  0001 C CNN
+	1    4150 3050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4150 2950 4150 3050
+Wire Wire Line
+	5000 2600 4150 2600
+Wire Wire Line
+	4150 2600 4150 2250
+Wire Wire Line
+	4150 2250 4000 2250
+Wire Wire Line
+	4150 2600 4150 2650
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F28BE77
+P 9700 2850
+F 0 "#PWR?" H 9700 2600 50  0001 C CNN
+F 1 "GNDD" H 9704 2695 50  0000 C CNN
+F 2 "" H 9700 2850 50  0001 C CNN
+F 3 "" H 9700 2850 50  0001 C CNN
+	1    9700 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9250 1650 9300 1650
+Wire Wire Line
+	9250 1950 9700 1950
+Wire Wire Line
+	9700 1950 9700 2250
+Wire Wire Line
+	9250 2250 9700 2250
+Connection ~ 9700 2250
+Wire Wire Line
+	9700 2250 9700 2850
+Wire Wire Line
+	8650 1750 8650 1650
+Wire Wire Line
+	8650 1750 8750 1750
+Connection ~ 8650 1650
+Wire Wire Line
+	8650 1650 8750 1650
+Text Label 5000 1650 2    50   ~ 0
+LED_P
+Text Label 5000 2600 2    50   ~ 0
+LED_N
+Wire Wire Line
+	9250 1750 9300 1750
+Wire Wire Line
+	9300 1750 9300 1650
+Connection ~ 9300 1650
+Wire Wire Line
+	9300 1650 9700 1650
+Text Label 9700 1650 2    50   ~ 0
+LED_N
+$Comp
+L power:GNDD #PWR?
+U 1 1 5F2C2028
+P 8250 2850
+F 0 "#PWR?" H 8250 2600 50  0001 C CNN
+F 1 "GNDD" H 8254 2695 50  0000 C CNN
+F 2 "" H 8250 2850 50  0001 C CNN
+F 3 "" H 8250 2850 50  0001 C CNN
+	1    8250 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8250 2850 8250 2450
+Wire Wire Line
+	8250 2450 8750 2450
+Wire Wire Line
+	8250 1950 8250 2450
+Wire Wire Line
+	8250 1950 8750 1950
+Connection ~ 8250 2450
+Connection ~ 4150 2600
+Wire Wire Line
+	3050 4500 3050 4750
+Connection ~ 3050 4750
+Wire Wire Line
+	3050 6100 7300 6100
+Wire Wire Line
+	2050 4500 3050 4500
 $EndSCHEMATC
