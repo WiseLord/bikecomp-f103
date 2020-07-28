@@ -1,6 +1,5 @@
 #include "comp.h"
 
-#include "action.h"
 #include "gui/canvas.h"
 #include "hwlibs.h"
 #include "input.h"
@@ -120,6 +119,20 @@ Comp *compGet()
     return &comp;
 }
 
+static void compChangeBikePar1(void)
+{
+    if (++comp.par1 >= BIKEPAR_END) {
+        comp.par1 = BIKEPAR_TRACK;
+    }
+}
+
+static void compChangeBikePar2(void)
+{
+    if (++comp.par2 >= BIKEPAR_END) {
+        comp.par2 = BIKEPAR_TRACK;
+    }
+}
+
 static void compActionGet(void)
 {
     if (ACTION_NONE == action.type) {
@@ -131,6 +144,72 @@ static void compActionGet(void)
     }
 }
 
+static void actionRemapBtnShort(void)
+{
+    switch (action.value) {
+    case BTN_1:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            break;
+        }
+        break;
+    case BTN_2:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            compChangeBikePar1();
+            break;
+        }
+        break;
+    case BTN_3:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            compChangeBikePar2();
+            break;
+        }
+        break;
+    }
+}
+
+static void actionRemapBtnLong(void)
+{
+    switch (action.value) {
+    case BTN_1:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            break;
+        }
+        break;
+    case BTN_2:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            break;
+        }
+        break;
+    case BTN_3:
+        switch (comp.screen) {
+        case SCREEN_MAIN:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+static void compActionRemap(void)
+{
+    switch (action.type) {
+    case ACTION_BTN_SHORT:
+        actionRemapBtnShort();
+        break;
+    case ACTION_BTN_LONG:
+        actionRemapBtnLong();
+        break;
+    default:
+        break;
+    }
+}
+
 static void compActionHandle(void)
 {
     switch (action.type) {
@@ -138,17 +217,39 @@ static void compActionHandle(void)
         rtcInit();
         break;
     }
+
+    action.type = ACTION_NONE;
+}
+
+static bool screenCheckClear(void)
+{
+    bool ret = false;
+
+    static ScreenType screen = SCREEN_END;
+
+    if (comp.screen != screen) {
+        ret = true;
+    }
+
+    screen = comp.screen;
+
+    return ret;
 }
 
 static void compScreenShow(void)
 {
-    canvasShowMain(true);
+    bool clear;
+
+    clear = screenCheckClear();
+
+    canvasShowMain(clear);
 }
 
 void compRun()
 {
     while (1) {
         compActionGet();
+        compActionRemap();
         compActionHandle();
         compScreenShow();
     }

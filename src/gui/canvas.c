@@ -60,7 +60,7 @@ void canvasClear()
     glcdSetFontBgColor(canvas.pal->bg);
 }
 
-void drawTime(bool clear)
+void drawTime(void)
 {
     char buf[10];
 
@@ -81,7 +81,7 @@ void drawTime(bool clear)
     font7segWriteString(buf);
 }
 
-static void drawSpeed(bool clear)
+static void drawSpeed(void)
 {
     char buf[8];
 
@@ -120,7 +120,7 @@ static void drawTrackLen()
 {
     char buf[32];
 
-    int32_t trackLengthM = compGetAvgSpeedMph();
+    int32_t trackLengthM = compGetTrackLengthM();
 
     glcdSetXY(3, 0);
     glcdSetFont(&fontterminus24b);
@@ -145,7 +145,7 @@ static void drawAvgSpeed()
 
     glcdSetXY(3, 0);
     glcdSetFont(&fontterminus24b);
-    snprintf(buf, sizeof(buf), "%s", "Track length");
+    snprintf(buf, sizeof(buf), "%s", "Average speed");
     glcdWriteString(buf);
 
     font7segLoad(font_7seg_6);
@@ -201,8 +201,20 @@ static void drawBikeParam(BikePar param)
     case BIKEPAR_SPEED_AVG:
         drawAvgSpeed();
         break;
+    case BIKEPAR_CADENCE:
+        break;
+    case BIKEPAR_DISTANCE:
+        break;
     default:
         break;
+    }
+}
+
+static void drawDivider(int16_t y, bool clear)
+{
+    if (clear) {
+        glcdResetRect();
+        glcdDrawRect(3, y, 234, 2, COLOR_BLACK);
     }
 }
 
@@ -216,39 +228,42 @@ void canvasShowMain(bool clear)
     glcdSetFontBgColor(pal->bg);
 
 
-    glcdSetRectValues(4, 4, 75, 27);
-//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
-    drawTime(clear);
+    char buf[32];
+    glcdSetXY(100, 0);
+    glcdSetFont(&fontterminus20b);
+    snprintf(buf, sizeof(buf), "0x%04x", inputGet()->btn);
+    glcdWriteString(buf);
 
-    if (clear) {
-        glcdResetRect();
-        glcdDrawRect(3, 35, 234, 2, COLOR_BLACK);
-    }
+    glcdSetRectValues(4, 4, 75, 27);
+    drawTime();
+
+    drawDivider(35, clear);
 
     glcdSetRectValues(67, 41, 169, 90);
-//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
-    drawSpeed(clear);
+    drawSpeed();
 
     glcdSetRectValues(15, 57, 24, 54);
     drawSpeedIcons(clear);
 
-    if (clear) {
-        glcdResetRect();
-        glcdDrawRect(3, 135, 234, 2, COLOR_BLACK);
-    }
+    drawDivider(135, clear);
 
+    // Parameter 1
     glcdSetRectValues(0, 141, 240, 82);
-//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
-
-    drawBikeParam(comp->par1);
-
-    if (clear) {
-        glcdResetRect();
-        glcdDrawRect(3, 228, 234, 2, COLOR_BLACK);
+    static BikePar par1 = BIKEPAR_END;
+    if (!clear && par1 != comp->par1) {
+        canvasClear();
     }
+    par1 = comp->par1;
+    drawBikeParam(par1);
 
+    drawDivider(228, clear);
+
+    // Parameter 2
     glcdSetRectValues(0, 234, 240, 82);
-//    glcdDrawRect(0, 0, glcdGet()->rect.w, glcdGet()->rect.h, COLOR_RED);
-
-    drawBikeParam(comp->par2);
+    static BikePar par2 = BIKEPAR_END;
+    if (!clear && par2 != comp->par2) {
+        canvasClear();
+    }
+    par2 = comp->par2;
+    drawBikeParam(par2);
 }

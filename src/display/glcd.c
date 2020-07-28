@@ -377,6 +377,10 @@ int16_t glcdWriteString(const char *string)
 
     const tFont *font = glcd.font;
 
+    if (font == NULL) {
+        return 0;
+    }
+
     if (glcd.fontAlign != GLCD_ALIGN_LEFT) {
         uint16_t strLength = 0;
         int16_t pos = glcdFontSymbolPos(LETTER_SPACE_CHAR);

@@ -27,7 +27,7 @@ enum {
 
 typedef uint8_t ScreenType;
 enum {
-    SCREEN_MAIN,
+    SCREEN_MAIN = 0,
 
     SCREEN_MENU,
 

@@ -8,6 +8,8 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "action.h"
+
 #define WHEEL_Port              GPIOB
 #define WHEEL_Pin               LL_GPIO_PIN_8
 #define WHEEL_ExtiLine          LL_EXTI_LINE_8
@@ -51,6 +53,7 @@ typedef struct {
 
     BikePar par1;
     BikePar par2;
+    ScreenType screen;
     bool inMove;
 
     int32_t trackTime;          // Track time when moving, sec
