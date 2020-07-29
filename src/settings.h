@@ -24,6 +24,9 @@ enum {
     PARAM_BIKE_PAR1,
     PARAM_BIKE_PAR2,
 
+    PARAM_BIKE_DIST_LOW,
+    PARAM_BIKE_DIST_HIGH,
+
     PARAM_END
 };
 

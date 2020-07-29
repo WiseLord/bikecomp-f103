@@ -21,6 +21,9 @@ static const EE_Cell eeMap[] = {
     [PARAM_BIKE_WHEEL_LEN]  =   {0x7A,  2062},
     [PARAM_BIKE_PAR1]       =   {0x7B,  BIKEPAR_TRACK},
     [PARAM_BIKE_PAR2]       =   {0x7C,  BIKEPAR_TRACK_TIME},
+
+    [PARAM_BIKE_DIST_LOW]   =   {0x7E,  0},
+    [PARAM_BIKE_DIST_HIGH]  =   {0x7F,  0},
 };
 
 void settingsInit(void)
@@ -28,7 +31,7 @@ void settingsInit(void)
     eeInit(eeMap, PARAM_END);
 
     for (Param par = PARAM_NULL + 1; par < PARAM_END; par++) {
-        settingsSet(par, settingsRead(par));
+//        settingsSet(par, settingsRead(par));
     }
 }
 

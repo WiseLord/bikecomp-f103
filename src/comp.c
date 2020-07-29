@@ -14,8 +14,7 @@
 #define FLAG_ENTER          1
 #define FLAG_SWITCH         2
 
-static CompPriv priv;
-static Comp comp = { .priv = &priv };
+static Comp comp;
 
 static Action action = {
     .type = ACTION_NONE,
@@ -99,7 +98,12 @@ void compInit()
 
     inputInit();
 
-    comp.wLenMm = settingsGet(PARAM_BIKE_WHEEL_LEN);
+    comp.wLenMm = settingsRead(PARAM_BIKE_WHEEL_LEN);
+    comp.par1 = settingsRead(PARAM_BIKE_PAR1);
+    comp.par2 = settingsRead(PARAM_BIKE_PAR2);
+
+    comp.distHigh = settingsRead(PARAM_BIKE_DIST_HIGH);
+    comp.distLow = settingsRead(PARAM_BIKE_DIST_LOW);
 
     NVIC_SetPriority(EXTI9_5_IRQn, 0);
     NVIC_EnableIRQ(EXTI9_5_IRQn);
@@ -124,6 +128,8 @@ static void compChangeBikePar1(void)
     if (++comp.par1 >= BIKEPAR_END) {
         comp.par1 = BIKEPAR_TRACK;
     }
+
+    settingsStore(PARAM_BIKE_PAR1, comp.par1);
 }
 
 static void compChangeBikePar2(void)
@@ -131,6 +137,8 @@ static void compChangeBikePar2(void)
     if (++comp.par2 >= BIKEPAR_END) {
         comp.par2 = BIKEPAR_TRACK;
     }
+
+    settingsStore(PARAM_BIKE_PAR2, comp.par2);
 }
 
 static void compActionGet(void)
@@ -270,7 +278,7 @@ int32_t compGetSpeedMph(void)
         return 0;
     }
 
-    return comp.wLenMm * 36000 / priv.wCntLastTurn;
+    return comp.wLenMm * 36000 / comp.wCntLastTurn;
 }
 
 int32_t compGetTrackLengthM(void)
@@ -301,6 +309,27 @@ int32_t compGetAvgSpeedMph(void)
     return comp.wLenMm * comp.wTurns * 36 / comp.trackTime / 10;
 }
 
+int32_t compGetCadenceRP10M(void)
+{
+    /*
+     * Counter freq = 10000 ticks / 1 sec = pCntLastTurn / time(sec)
+     * cadence(per sec) = 1 / time (sec)
+     * So, cadence(RPM) = 60 / (pCntLastTurn / 10000)
+     * Cadence per 10 minutes = 10 * 60 / (pCntLastTurn / 10000)
+    */
+
+    if (comp.pCntLastTurn == 0) {
+        return 0;
+    }
+
+    return (10 * 60 * 10000) / comp.pCntLastTurn;
+}
+
+int32_t compGetTotalDistanceM(void)
+{
+    return comp.distanceM + compGetTrackLengthM();
+}
+
 static void compWheelCb(void)
 {
     if (swTimGet(SW_TIM_WHEEL_ANTIBOUNCE > 0)) {
@@ -311,11 +340,11 @@ static void compWheelCb(void)
     LL_TIM_SetCounter(TIM_COMP, 0);
 
     // Update counter for the pedal
-    priv.pCntCurrTurn += tcnt;
+    comp.pCntCurrTurn += tcnt;
 
     // Save wheel counter of the full turn
-    priv.wCntLastTurn = priv.wCntCurrTurn + tcnt;
-    priv.wCntCurrTurn = 0;
+    comp.wCntLastTurn = comp.wCntCurrTurn + tcnt;
+    comp.wCntCurrTurn = 0;
 
     swTimSet(SW_TIM_WHEEL_ANTIBOUNCE, ANTIBOUNCE);
 
@@ -333,11 +362,11 @@ static void compPedalCb(void)
     LL_TIM_SetCounter(TIM_COMP, 0);
 
     // Update counter for the wheel
-    priv.wCntCurrTurn += tcnt;
+    comp.wCntCurrTurn += tcnt;
 
     // Save pedal counter of the full turn
-    priv.pCntLastTurn = priv.pCntCurrTurn + tcnt;
-    priv.pCntCurrTurn = 0;
+    comp.pCntLastTurn = comp.pCntCurrTurn + tcnt;
+    comp.pCntCurrTurn = 0;
 
     swTimSet(SW_TIM_PEDAL_ANTIBOUNCE, ANTIBOUNCE);
 

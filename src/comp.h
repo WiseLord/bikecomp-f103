@@ -22,7 +22,7 @@ extern "C" {
 #define PEDAL_AR_ExtiPort       LL_GPIO_AF_EXTI_PORTB
 #define PEDAL_AR_ExtiLine       LL_GPIO_AF_EXTI_LINE9
 
-typedef int8_t BikePar;
+typedef int16_t BikePar;
 enum {
     BIKEPAR_SPEED = 0,
 
@@ -36,20 +36,24 @@ enum {
 };
 
 typedef struct {
+    int32_t wLenMm;             // Length of wheel, mm
+
+    union {
+        uint32_t distanceM;      // Total distance, m
+        struct {
+            int16_t distLow;
+            int16_t distHigh;
+        };
+    };
+
+    int32_t wTurns;             // Number of wheel turns in the trip
+    int32_t pTurns;             // Number of pedal turns in the trip
+
     uint32_t wCntCurrTurn;      // Wheel counter in the current turn
     uint32_t pCntCurrTurn;      // Pedal counter in the current turn
 
     uint32_t wCntLastTurn;      // Wheel counter in the last full turn
     uint32_t pCntLastTurn;      // Pedal counter in the last full turn
-} CompPriv;
-
-typedef struct {
-    CompPriv *priv;
-
-    int32_t wLenMm;             // Length of wheel, mm
-
-    int32_t wTurns;             // Number of wheel turns in the trip
-    int32_t pTurns;             // Number of pedal turns in the trip
 
     BikePar par1;
     BikePar par2;
@@ -64,10 +68,12 @@ Comp *compGet();
 
 void compRun(void);
 
-int32_t compGetSpeedMph(void);      // Get speed in m/hour
-int32_t compGetTrackLengthM(void);  // Get track length in meters
-int32_t compGetTrackTime(void);     // Get track time in seconds
-int32_t compGetAvgSpeedMph(void);   // Get average speed in m/hour
+int32_t compGetSpeedMph(void);          // Get speed in m/hour
+int32_t compGetTrackLengthM(void);      // Get track length in meters
+int32_t compGetTrackTime(void);         // Get track time in seconds
+int32_t compGetAvgSpeedMph(void);       // Get average speed in m/hour
+int32_t compGetCadenceRP10M(void);      // Get cadence in rounds per 10 minutes
+int32_t compGetTotalDistanceM(void);    // Get total distance in m
 
 #ifdef __cplusplus
 }

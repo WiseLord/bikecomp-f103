@@ -60,7 +60,7 @@ void canvasClear()
     glcdSetFontBgColor(canvas.pal->bg);
 }
 
-void drawTime(void)
+static void drawTime(void)
 {
     char buf[10];
 
@@ -85,16 +85,16 @@ static void drawSpeed(void)
 {
     char buf[8];
 
-    int32_t speedMph = compGetSpeedMph();
+    int32_t param = compGetSpeedMph();
 
     glcdSetXY(0, 0);
     font7segLoad(font_7seg_10);
-    snprintf(buf, sizeof(buf), "%2d", (int)(speedMph / 1000));
+    snprintf(buf, sizeof(buf), "%2d", (int)(param / 1000));
     font7segWriteString(buf);
 
     glcdSetY(3);
     font7segLoad(font_7seg_7);
-    snprintf(buf, sizeof(buf), ".%1d", (int)(speedMph % 1000 / 100));
+    snprintf(buf, sizeof(buf), ".%1d", (int)(param % 1000 / 100));
     font7segWriteString(buf);
 
     glcdSetXY(glcdGet()->x - 56, 70);
@@ -120,41 +120,20 @@ static void drawTrackLen()
 {
     char buf[32];
 
-    int32_t trackLengthM = compGetTrackLengthM();
+    int32_t param = compGetTrackLengthM();
 
-    glcdSetXY(3, 0);
+    glcdSetXY(4, 0);
     glcdSetFont(&fontterminus24b);
     snprintf(buf, sizeof(buf), "%s", "Track length");
     glcdWriteString(buf);
 
     font7segLoad(font_7seg_6);
-    glcdSetXY(75, 28);
-    snprintf(buf, sizeof(buf), "%3d", (int)(trackLengthM / 1000));
+    glcdSetXY(76, 28);
+    snprintf(buf, sizeof(buf), "%3d", (int)(param / 1000));
     font7segWriteString(buf);
 
     font7segLoad(font_7seg_4);
-    snprintf(buf, sizeof(buf), ".%02d", (int)(trackLengthM % 1000 / 10));
-    font7segWriteString(buf);
-}
-
-static void drawAvgSpeed()
-{
-    char buf[32];
-
-    int32_t trackLengthM = compGetAvgSpeedMph();
-
-    glcdSetXY(3, 0);
-    glcdSetFont(&fontterminus24b);
-    snprintf(buf, sizeof(buf), "%s", "Average speed");
-    glcdWriteString(buf);
-
-    font7segLoad(font_7seg_6);
-    glcdSetXY(75, 28);
-    snprintf(buf, sizeof(buf), "%3d", (int)(trackLengthM / 1000));
-    font7segWriteString(buf);
-
-    font7segLoad(font_7seg_4);
-    snprintf(buf, sizeof(buf), ".%02d", (int)(trackLengthM % 1000 / 10));
+    snprintf(buf, sizeof(buf), ".%02d", (int)(param % 1000 / 10));
     font7segWriteString(buf);
 }
 
@@ -162,30 +141,93 @@ static void drawTrackTime()
 {
     char buf[32];
 
-    int32_t trackTime = compGetTrackTime();
+    int32_t param = compGetTrackTime();
 
-    int8_t seconds = trackTime % 60;
-    trackTime /= 60;
-    int8_t minutes = trackTime % 60;
-    trackTime /= 60;
-    int8_t hours = trackTime % 24;
-    trackTime /= 24;
+    int8_t seconds = param % 60;
+    param /= 60;
+    int8_t minutes = param % 60;
+    param /= 60;
+    int8_t hours = param % 24;
+    param /= 24;
 
     // TODO: selecte between HH:MM:ss and DD:HH:mm
 
-    glcdSetXY(3, 0);
+    glcdSetXY(4, 0);
     glcdSetFont(&fontterminus24b);
     snprintf(buf, sizeof(buf), "%s", "Track time");
     glcdWriteString(buf);
 
     font7segLoad(font_7seg_6);
-    glcdSetXY(26, 28);
+    glcdSetXY(28, 28);
     snprintf(buf, sizeof(buf), "%2d:%02d", hours, minutes);
     font7segWriteString(buf);
 
     font7segLoad(font_7seg_4);
     snprintf(buf, sizeof(buf), ".%02d", seconds);
 
+    font7segWriteString(buf);
+}
+
+static void drawAvgSpeed()
+{
+    char buf[32];
+
+    int32_t param = compGetAvgSpeedMph();
+
+    glcdSetXY(4, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Average speed");
+    glcdWriteString(buf);
+
+    font7segLoad(font_7seg_6);
+    glcdSetXY(76, 28);
+    snprintf(buf, sizeof(buf), "%3d", (int)(param / 1000));
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_4);
+    snprintf(buf, sizeof(buf), ".%02d", (int)(param % 1000 / 10));
+    font7segWriteString(buf);
+}
+
+static void drawCadence()
+{
+    char buf[32];
+
+    int32_t param = compGetCadenceRP10M();
+
+    glcdSetXY(4, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Cadence");
+    glcdWriteString(buf);
+
+    font7segLoad(font_7seg_6);
+    glcdSetXY(100, 28);
+    snprintf(buf, sizeof(buf), "%3d", (int)(param / 10));
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_4);
+    snprintf(buf, sizeof(buf), ".%1d", (int)(param % 10));
+    font7segWriteString(buf);
+}
+
+static void drawDistance()
+{
+    char buf[32];
+
+    int32_t param = compGetTotalDistanceM();
+
+    glcdSetXY(4, 0);
+    glcdSetFont(&fontterminus24b);
+    snprintf(buf, sizeof(buf), "%s", "Total distance");
+    glcdWriteString(buf);
+
+    font7segLoad(font_7seg_6);
+    glcdSetXY(28, 28);
+    snprintf(buf, sizeof(buf), "%5d", (int)(param / 1000));
+    font7segWriteString(buf);
+
+    font7segLoad(font_7seg_4);
+    snprintf(buf, sizeof(buf), ".%1d", (int)(param % 1000 / 100));
     font7segWriteString(buf);
 }
 
@@ -202,8 +244,10 @@ static void drawBikeParam(BikePar param)
         drawAvgSpeed();
         break;
     case BIKEPAR_CADENCE:
+        drawCadence();
         break;
     case BIKEPAR_DISTANCE:
+        drawDistance();
         break;
     default:
         break;
@@ -214,7 +258,7 @@ static void drawDivider(int16_t y, bool clear)
 {
     if (clear) {
         glcdResetRect();
-        glcdDrawRect(3, y, 234, 2, COLOR_BLACK);
+        glcdDrawRect(4, y, 232, 2, COLOR_BLACK);
     }
 }
 
@@ -227,12 +271,7 @@ void canvasShowMain(bool clear)
     glcdSetFontColor(pal->fg);
     glcdSetFontBgColor(pal->bg);
 
-
-    char buf[32];
-    glcdSetXY(100, 0);
-    glcdSetFont(&fontterminus20b);
-    snprintf(buf, sizeof(buf), "0x%04x", inputGet()->btn);
-    glcdWriteString(buf);
+//    glcdDrawFrame(0, 0, 240, 320, 4, COLOR_RED);
 
     glcdSetRectValues(4, 4, 75, 27);
     drawTime();
