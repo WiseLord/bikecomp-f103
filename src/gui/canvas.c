@@ -107,13 +107,44 @@ static void drawSpeedIcons(bool clear)
 {
     const tImage *img;
 
+    static bool iconAboveOld = false;
+    static bool iconBelowOld = false;
+
+    bool iconAbove = false;
+    bool iconBelow = false;
+
+    int32_t speed = compGetSpeedMph();
+    int32_t avgSpeed = compGetAvgSpeedMph();
+
+    if (avgSpeed != 0 && speed != 0) {
+        iconAbove = (avgSpeed - speed < 1000);
+        iconBelow = (speed - avgSpeed < 1000);
+    }
+
     glcdSetXY(0, 0);
     img = glcdFindIcon(ICON_ABOVE, &bikecompicons);
-    glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
+
+    if (clear || iconAbove != iconAboveOld) {
+        if (iconAbove) {
+            glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
+        } else {
+            glcdDrawImage(img, canvas.pal->bg, canvas.pal->bg);
+        }
+    }
 
     glcdSetXY(0, 30);
     img = glcdFindIcon(ICON_BELOW, &bikecompicons);
-    glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
+
+    if (clear || iconBelow != iconBelowOld) {
+        if (iconBelow) {
+            glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
+        } else {
+            glcdDrawImage(img, canvas.pal->bg, canvas.pal->bg);
+        }
+    }
+
+    iconAboveOld = iconAbove;
+    iconBelowOld = iconBelow;
 }
 
 static void drawTrackLen()
