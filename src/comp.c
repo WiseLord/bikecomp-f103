@@ -98,12 +98,12 @@ void compInit()
 
     inputInit();
 
-    comp.wLenMm = settingsRead(PARAM_BIKE_WHEEL_LEN);
-    comp.par1 = settingsRead(PARAM_BIKE_PAR1);
-    comp.par2 = settingsRead(PARAM_BIKE_PAR2);
+    comp.wLenMm = settingsRead(PARAM_BIKE_WHEEL_LEN, 2000);
+    comp.par1 = settingsRead(PARAM_BIKE_PAR1, BIKEPAR_TRACK);
+    comp.par2 = settingsRead(PARAM_BIKE_PAR2, BIKEPAR_TRACK_TIME);
 
-    comp.distHigh = settingsRead(PARAM_BIKE_DIST_HIGH);
-    comp.distLow = settingsRead(PARAM_BIKE_DIST_LOW);
+    comp.distHigh = settingsRead(PARAM_BIKE_DIST_HIGH, 0);
+    comp.distLow = settingsRead(PARAM_BIKE_DIST_LOW, 0);
 
     NVIC_SetPriority(EXTI9_5_IRQn, 0);
     NVIC_EnableIRQ(EXTI9_5_IRQn);

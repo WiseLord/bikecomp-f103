@@ -9,7 +9,6 @@ extern "C" {
 
 #include "eemul.h"
 
-
 typedef uint8_t Param;
 enum {
     PARAM_NULL = 0,
@@ -32,13 +31,10 @@ enum {
 
 void settingsInit(void);
 
-int16_t settingsGet(Param param);
-void settingsSet(Param param, int16_t value);
-
-int16_t settingsRead(Param param);
+int16_t settingsRead(Param param, int16_t defVal);
 void settingsStore(Param param, int16_t value);
 
-const EE_Cell *eeMapGet(void);
+const uint16_t *eeMapGet(void);
 
 #ifdef __cplusplus
 }
