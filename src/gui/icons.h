@@ -16,6 +16,9 @@ enum {
     ICON_ABOVE = ICON_BEGIN,
     ICON_BELOW,
 
+    ICON_WHEEL_BEGIN = 0x10,
+    ICON_WHEEL_END = ICON_WHEEL_BEGIN + 15,
+
     ICON_END,
 };
 

@@ -81,6 +81,17 @@ static void drawTime(void)
     font7segWriteString(buf);
 }
 
+static void drawWheelAnimation(void)
+{
+    const tImage *img;
+
+    uint8_t phase = compGet()->wTurns % 16;
+
+    glcdSetXY(0, 0);
+    img = glcdFindIcon(ICON_WHEEL_BEGIN + phase, &bikecompicons);
+    glcdDrawImage(img, canvas.pal->fg, canvas.pal->bg);
+}
+
 static void drawSpeed(void)
 {
     char buf[8];
@@ -306,6 +317,9 @@ void canvasShowMain(bool clear)
 
     glcdSetRectValues(4, 4, 75, 27);
     drawTime();
+
+    glcdSetRectValues(100, 4, 27, 27);
+    drawWheelAnimation();
 
     drawDivider(35, clear);
 
