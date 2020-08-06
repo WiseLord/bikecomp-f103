@@ -230,6 +230,10 @@ static inline void dispdrvSendColor(color_t data)
 
 void dispdrvReset(void)
 {
+#ifdef _DISP_BCKL_ENABLED
+    CLR(DISP_BCKL);
+#endif
+
 #ifdef _DISP_SPI
     spiInit(SPI_DISPLAY, false);
 #else
@@ -286,6 +290,11 @@ static void dispdrvInitPins(void)
 #elif defined (_DISP_8BIT)
     initDef.Pin = DISP_DATA_Pin;
     LL_GPIO_Init(DISP_DATA_Port, &initDef);
+#endif
+
+#ifdef _DISP_BCKL_ENABLED
+    initDef.Pin = DISP_BCKL_Pin;
+    LL_GPIO_Init(DISP_BCKL_Port, &initDef);
 #endif
 }
 

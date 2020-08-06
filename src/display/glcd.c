@@ -98,6 +98,19 @@ void glcdInit(GlcdOrientation value)
     glcdSetOrientation(value);
 }
 
+void glcdSetBacklight(bool value)
+{
+#ifdef _DISP_BCKL_ENABLED
+    if (value) {
+        SET(DISP_BCKL);
+    } else {
+        CLR(DISP_BCKL);
+    }
+#else
+    (void)value;
+#endif
+}
+
 Glcd *glcdGet(void)
 {
     return &glcd;

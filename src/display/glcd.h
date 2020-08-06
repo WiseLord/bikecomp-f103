@@ -51,6 +51,8 @@ typedef int32_t UChar;
 
 void glcdInit(GlcdOrientation value);
 
+void glcdSetBacklight(bool value);
+
 Glcd *glcdGet(void);
 
 void glcdSetOrientation(GlcdOrientation value);
