@@ -54,7 +54,7 @@ __attribute__((always_inline))
 static inline void dispdrvSendByte(uint8_t data)
 {
 #ifdef _DISP_SPI
-    spiSendByte(SPI_DISPLAY, data);
+    DISP_SPI_SEND_BYTE(data);
 #else
 #if defined(_DISP_16BIT)
     WRITE_BYTE(DISP_DATA_HI, 0x00);
@@ -93,32 +93,11 @@ static inline void dispdrvBusIn(void)
 #if defined(_DISP_16BIT)
     WRITE_BYTE(DISP_DATA_HI, 0xFF);         // Set HIGH level on all data lines
     WRITE_BYTE(DISP_DATA_LO, 0xFF);
-#ifdef STM32F1
-    DISP_DATA_HI_Port->CRH = 0x88888888;
-    DISP_DATA_LO_Port->CRL = 0x88888888;
-#endif
-#ifdef STM32F3
-    DISP_DATA_HI_Port->MODER &= 0x0000FFFF;
-    DISP_DATA_LO_Port->MODER &= 0xFFFF0000;
-#endif
+    IN_BYTE(DISP_DATA_HI);
+    IN_BYTE(DISP_DATA_LO);
 #elif defined(_DISP_8BIT)
     WRITE_BYTE(DISP_DATA, 0xFF);            // Set HIGH level on all data lines
-
-#if IS_GPIO_LO(DISP_DATA)
-#ifdef STM32F1
-    DISP_DATA_Port->CRL = 0x88888888;
-#endif
-#ifdef STM32F3
-    DISP_DATA_Port->MODER &= 0xFFFF0000;
-#endif
-#elif IS_GPIO_HI(DISP_DATA)
-#ifdef STM32F1
-    DISP_DATA_Port->CRH = 0x88888888;
-#endif
-#ifdef STM32F3
-    DISP_DATA_Port->MODER &= 0x0000FFFF;
-#endif
-#endif
+    IN_BYTE(DISP_DATA);
 #endif
     busBusy = false;
 }
@@ -131,35 +110,10 @@ static inline void dispdrvBusOut(void)
         busBusy = true;
     }
 #if defined(_DISP_16BIT)
-#ifdef STM32F1
-    DISP_DATA_HI_Port->CRH = 0x33333333;
-    DISP_DATA_LO_Port->CRL = 0x33333333;
-#endif
-#ifdef STM32F3
-    DISP_DATA_HI_Port->MODER &= 0x0000FFFF;
-    DISP_DATA_HI_Port->MODER |= 0x55550000;
-    DISP_DATA_LO_Port->MODER &= 0xFFFF0000;
-    DISP_DATA_LO_Port->MODER |= 0x55550000;
-#endif
+    OUT_BYTE(DISP_DATA_HI);
+    OUT_BYTE(DISP_DATA_LO);
 #elif defined(_DISP_8BIT)
-#if IS_GPIO_LO(DISP_DATA)
-#ifdef STM32F1
-    DISP_DATA_Port->CRL = 0x33333333;
-#endif
-#ifdef STM32F3
-    DISP_DATA_Port->MODER &= 0xFFFF0000;
-    DISP_DATA_Port->MODER |= 0x00005555;
-#endif
-#endif
-#if IS_GPIO_HI(DISP_DATA)
-#ifdef STM32F1
-    DISP_DATA_Port->CRH = 0x33333333;
-#endif
-#ifdef STM32F3
-    DISP_DATA_Port->MODER &= 0x0000FFFF;
-    DISP_DATA_Port->MODER |= 0x55550000;
-#endif
-#endif
+    OUT_BYTE(DISP_DATA);
 #endif
 }
 
@@ -235,7 +189,7 @@ void dispdrvReset(void)
 #endif
 
 #ifdef _DISP_SPI
-    spiInit(SPI_DISPLAY, false);
+    DISP_SPI_INIT();
 #else
     SET(DISP_CS);
 #ifdef _DISP_READ_ENABLED
@@ -246,55 +200,35 @@ void dispdrvReset(void)
     SET(DISP_RS);
 #ifdef _DISP_RST_ENABLED
     CLR(DISP_RST);
-    utilmDelay(50);
+    DISP_MDELAY(50);
     SET(DISP_RST);
 #endif
-    utilmDelay(50);
+    DISP_MDELAY(50);
 }
 
 static void dispdrvInitPins(void)
 {
-    LL_GPIO_InitTypeDef initDef = {0};
-
-    initDef.Mode = LL_GPIO_MODE_OUTPUT;
-    initDef.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-    initDef.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-#ifdef STM32F3
-    initDef.Pull = LL_GPIO_PULL_NO;
-#endif
-
-    initDef.Pin = DISP_CS_Pin;
-    LL_GPIO_Init(DISP_CS_Port, &initDef);
-    initDef.Pin = DISP_RS_Pin;
-    LL_GPIO_Init(DISP_RS_Port, &initDef);
+    OUT_PIN(DISP_CS);
+    OUT_PIN(DISP_RS);
 
 #ifdef _DISP_RST_ENABLED
-    initDef.Pin = DISP_RST_Pin;
-    LL_GPIO_Init(DISP_RST_Port, &initDef);
+    OUT_PIN(DISP_RST);
 #endif
 
 #ifndef _DISP_SPI
-    initDef.Pin = DISP_WR_Pin;
-    LL_GPIO_Init(DISP_WR_Port, &initDef);
-#endif
-#ifdef _DISP_READ_ENABLED
-    initDef.Pin = DISP_RD_Pin;
-    LL_GPIO_Init(DISP_RD_Port, &initDef);
+    OUT_PIN(DISP_WR);
 #endif
 
-#if defined(_DISP_16BIT)
-    initDef.Pin = DISP_DATA_LO_Pin;
-    LL_GPIO_Init(DISP_DATA_LO_Port, &initDef);
-    initDef.Pin = DISP_DATA_HI_Pin;
-    LL_GPIO_Init(DISP_DATA_HI_Port, &initDef);
-#elif defined (_DISP_8BIT)
-    initDef.Pin = DISP_DATA_Pin;
-    LL_GPIO_Init(DISP_DATA_Port, &initDef);
+#ifdef _DISP_READ_ENABLED
+    OUT_PIN(DISP_RD);
 #endif
 
 #ifdef _DISP_BCKL_ENABLED
-    initDef.Pin = DISP_BCKL_Pin;
-    LL_GPIO_Init(DISP_BCKL_Port, &initDef);
+    OUT_PIN(DISP_BCKL);
+#endif
+
+#ifndef _DISP_SPI
+    dispdrvBusOut();
 #endif
 }
 

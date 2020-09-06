@@ -36,6 +36,7 @@ void canvasInit()
 {
     glcdInit(GLCD_PORTRATE);
     glcdSetIdle(true);
+    glcdSetBacklight(true);
 
     canvas.glcd = glcdGet();
 

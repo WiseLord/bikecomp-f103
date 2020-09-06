@@ -59,6 +59,8 @@ src/display/gg256x64/ssd1322.c
 src/display/gg256x64/ssd1322.h
 src/display/glcd.c
 src/display/glcd.h
+src/display/hw_stm32f1_ll.h
+src/display/hw_stm32f3_ll.h
 src/drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 src/drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h
 src/drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xg.h
